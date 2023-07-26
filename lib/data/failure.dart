@@ -11,6 +11,7 @@ class ConnectionFailure extends Failure {
   const ConnectionFailure(String? message) : super(message);
 }
 
+//For local data source e.g. Hive
 class DatabaseFailure extends Failure {
   const DatabaseFailure(String? message) : super(message);
 }
