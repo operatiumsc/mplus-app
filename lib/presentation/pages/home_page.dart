@@ -1,139 +1,135 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:mplus_app/presentation/pages/login_page.dart';
+import 'package:mplus_app/presentation/widgets/text_hover_builder.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends HookWidget {
+import '../controllers/home_controller.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> scaffoldStateKey = GlobalKey<ScaffoldState>();
+
+  final pageController = PageController(initialPage: 0, keepPage: true);
+
+  late HomeController homeController;
+
+  @override
+  void initState() {
+    homeController = Provider.of<HomeController>(context, listen: false);
+    homeController.currentSelectedMenu = homeController.salesMenu;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldStateKey =
-        GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldStateKey,
       appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                scaffoldStateKey.currentState?.openDrawer();
-              },
-              icon: Icon(Icons.menu_rounded)),
-          title: const Text('Kids\'App')),
-      body: Row(
-        children: [
-          _NavRail(),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: SizedBox(
-              width: double.infinity,
-              height: 200,
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, right: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey[300],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, bottom: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.blue[700],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+        leading: Row(
+          children: [
+            PopupMenuButton(
+              icon: const Icon(Icons.apps),
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                    child: ListTile(
+                  title: Text('Sales'),
+                )),
+                const PopupMenuItem(
+                    child: ListTile(
+                  title: Text('Customers'),
+                )),
+                const PopupMenuItem(
+                    child: ListTile(
+                  title: Text('Inventory'),
+                )),
+                const PopupMenuItem(
+                    child: ListTile(
+                  title: Text('Shipments'),
+                ))
+              ],
             ),
-          ),
-        ],
+            Text(
+              context.watch<HomeController>().selectedMenu,
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Row(
+              children: homeController.currentSelectedMenu
+                  .map((e) => Visibility(
+                        visible: e.isVisible,
+                        child: TextHoverBuilder(
+                          builder: (isHovered) => TextButton(
+                              onPressed: () {
+                                pageController.jumpToPage(homeController
+                                    .currentSelectedMenu
+                                    .indexOf(e));
+                              },
+                              child: Text(
+                                e.menu!,
+                                style: isHovered
+                                    ? hoverTextStyle
+                                    : normalTextStyle,
+                              )),
+                        ),
+                      ))
+                  .toList(),
+            ),
+            const Spacer(),
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: TextButton.icon(
+                              onPressed: () {},
+                              icon: Icon(Icons.settings),
+                              label: Text('Settings'))),
+                      PopupMenuItem(
+                          child: TextButton.icon(
+                              onPressed: () {
+                                //TODO: Call await AuthController.signOut();
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => const LoginPage()),
+                                  (route) => route.isFirst,
+                                );
+                              },
+                              icon: Icon(Icons.logout),
+                              label: Text('Sign out'))),
+                    ],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: const CircleAvatar()),
+            const SizedBox(
+              width: 8,
+            ),
+          ],
+        ),
+        leadingWidth: double.infinity,
+        toolbarHeight: 64,
+        foregroundColor: Colors.white,
       ),
-      drawer: _HomeDrawer(),
-    );
-  }
-}
-
-class _NavRail extends StatelessWidget {
-  const _NavRail({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    int selectedIndex = 0;
-    return NavigationRail(
-      destinations: [
-        NavigationRailDestination(
-          icon: Icon(Icons.book_outlined),
-          selectedIcon: Icon(
-            Icons.book_outlined,
-            color: Theme.of(context).primaryColor,
-          ),
-          label: Text('Quotations'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.book),
-          selectedIcon: Icon(
-            Icons.book,
-            color: Theme.of(context).primaryColor,
-          ),
-          label: Text('Purchase Orders'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.receipt),
-          selectedIcon: Icon(
-            Icons.receipt,
-            color: Theme.of(context).primaryColor,
-          ),
-          label: Text('Purchase Orders'),
-        ),
-      ],
-      labelType: NavigationRailLabelType.all,
-      selectedIndex: selectedIndex,
-      onDestinationSelected: (index) {},
-    );
-  }
-}
-
-class _HomeDrawer extends HookWidget {
-  const _HomeDrawer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: [
-          ListTile(
-            leading: Icon(Icons.book_outlined),
-            title: Text('Quotations'),
-          ),
-          ListTile(
-            leading: Icon(Icons.book),
-            title: Text('Purchase Orders'),
-          ),
-          ListTile(
-            leading: Icon(Icons.receipt),
-            title: Text('Invoices'),
-          ),
-          ListTile(
-            leading: Icon(Icons.payment),
-            title: Text('Payment'),
-          ),
-          ListTile(
-            leading: Icon(Icons.local_shipping),
-            title: Text('Shipment'),
-          ),
-          ListTile(
-            leading: Icon(Icons.backpack),
-            title: Text('Backorders'),
-          ),
-          ListTile(
-            leading: Icon(Icons.person_2),
-            title: Text('Customers'),
-          )
-        ],
+      body: PageView(
+        controller: pageController,
+        onPageChanged: (index) => homeController.onSelectedMenu(index),
+        children: homeController.currentSelectedMenu
+            .where((e) => e.isVisible)
+            .map((e) => e.child ?? Container())
+            .toList(),
       ),
     );
   }
+
+  static const normalTextStyle =
+      TextStyle(color: Colors.white, fontWeight: FontWeight.normal);
+  static const hoverTextStyle =
+      TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
 }
