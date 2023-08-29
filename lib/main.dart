@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mplus_app/presentation/controllers/home_controller.dart';
-import 'package:mplus_app/presentation/pages/home_page.dart';
+import 'package:mplus_app/app/pages/home/home_controller.dart';
+import 'package:mplus_app/app/pages/home/home_page.dart';
+import 'package:mplus_app/data/data_sources/local/cached_service.dart';
+import 'package:mplus_app/data/data_sources/remote/rest_service.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => HomeController()),
-  ], child: const MyApp()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SharedPrefs().init();
+  DioClient().init();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeController()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

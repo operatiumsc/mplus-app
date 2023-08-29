@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class LocalStorageService {
+abstract class CachedService {
   Future init();
   Future setInt(String key, int value);
   Future setBool(String key, bool value);
@@ -17,7 +17,7 @@ abstract class LocalStorageService {
   Future<bool> remove(String key);
 }
 
-class LocalStorageServiceImpl implements LocalStorageService {
+class SharedPrefs implements CachedService {
   late SharedPreferences prefs;
 
   @override

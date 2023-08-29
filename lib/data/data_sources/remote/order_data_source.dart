@@ -1,16 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:mplus_app/data/failure.dart';
 import 'package:mplus_app/data/models/order_model.dart';
-import 'package:mplus_app/data/services/client_service.dart';
+import 'package:mplus_app/data/data_sources/remote/rest_service.dart';
 
-import '../exception.dart';
-
-abstract class OrderDataSource {
-  Future<Either<Failure, List<OrderModel>>> getOrders();
-}
+import '../../../domain/data_sources/order_data_source.dart';
+import '../../exception.dart';
 
 class OrderDataSourceImpl implements OrderDataSource {
-  final client = ClientService.init();
+  final client = DioClient().init();
 
   @override
   Future<Either<Failure, List<OrderModel>>> getOrders() async {

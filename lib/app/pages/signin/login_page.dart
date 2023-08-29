@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:mplus_app/presentation/pages/home_page.dart';
-import 'package:mplus_app/presentation/pages/register_page.dart';
+import 'package:mplus_app/app/pages/home/home_page.dart';
+import 'package:mplus_app/app/pages/signup/register_page.dart';
 
 class LoginPage extends HookWidget {
   const LoginPage({super.key});

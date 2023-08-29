@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class MainMenuEntity {
+class MainMenu {
   final int? order;
   final String? menu;
   final bool? isSelected;
@@ -8,7 +8,7 @@ class MainMenuEntity {
   final Widget? child;
   final bool isVisible;
 
-  MainMenuEntity({
+  MainMenu({
     this.order,
     this.menu,
     this.isSelected,
