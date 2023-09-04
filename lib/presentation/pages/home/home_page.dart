@@ -1,28 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mplus_app/app/pages/signin/login_page.dart';
-import 'package:mplus_app/app/widgets/text_hover_builder.dart';
+import 'package:mplus_app/presentation/pages/signin/signin_page.dart';
+import 'package:mplus_app/presentation/widgets/text_hover_builder.dart';
 import 'package:provider/provider.dart';
 
-import 'home_controller.dart';
+import 'Home_page_change_notifier.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    //TODO: implement provider
+    return const _HomeView();
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeView extends StatefulWidget {
+  const _HomeView({super.key});
+
+  @override
+  State<_HomeView> createState() => __HomeViewState();
+}
+
+class __HomeViewState extends State<_HomeView> {
   final GlobalKey<ScaffoldState> scaffoldStateKey = GlobalKey<ScaffoldState>();
 
   final pageController = PageController(initialPage: 0, keepPage: true);
 
-  late HomeController homeController;
+  late HomePageChangeNotifier homeController;
 
   @override
   void initState() {
-    homeController = Provider.of<HomeController>(context, listen: false);
+    homeController =
+        Provider.of<HomePageChangeNotifier>(context, listen: false);
     homeController.currentSelectedMenu = homeController.salesMenu;
     super.initState();
   }
@@ -56,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             Text(
-              context.watch<HomeController>().selectedMenu,
+              context.watch<HomePageChangeNotifier>().selectedMenu,
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(
@@ -87,23 +98,28 @@ class _HomePageState extends State<HomePage> {
             PopupMenuButton(
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                          child: TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(Icons.settings),
-                              label: Text('Settings'))),
+                        child: TextButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.settings),
+                          label: const Text('Settings'),
+                        ),
+                      ),
                       PopupMenuItem(
-                          child: TextButton.icon(
-                              onPressed: () {
-                                //TODO: Call await AuthController.signOut();
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (context) => const LoginPage()),
-                                  (route) => route.isFirst,
-                                );
-                              },
-                              icon: Icon(Icons.logout),
-                              label: Text('Sign out'))),
+                        child: TextButton.icon(
+                          onPressed: () {
+                            context
+                                .read<HomePageChangeNotifier>()
+                                .performSignOut();
+
+                            Navigator.of(context).pushAndRemoveUntil(
+                                CupertinoPageRoute(
+                                    builder: (context) => const LoginPage()),
+                                (route) => false);
+                          },
+                          icon: const Icon(Icons.logout),
+                          label: const Text('Sign out'),
+                        ),
+                      ),
                     ],
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),

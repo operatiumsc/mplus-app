@@ -1,25 +1,27 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:mplus_app/data/failure.dart';
-import 'package:mplus_app/data/models/order_model.dart';
-import 'package:mplus_app/data/data_sources/remote/rest_service.dart';
+import 'package:mplus_app/data/dto/order_dto.dart';
+import 'package:mplus_app/injection.dart';
 
-import '../../../domain/data_sources/order_data_source.dart';
-import '../../exception.dart';
+abstract class OrderDataSource {
+  Future<Either<Failure, List<OrderDTO>>> getOrders();
+}
 
 class OrderDataSourceImpl implements OrderDataSource {
-  final client = DioClient().init();
+  final _dio = service.get<Dio>();
 
   @override
-  Future<Either<Failure, List<OrderModel>>> getOrders() async {
+  Future<Either<Failure, List<OrderDTO>>> getOrders() async {
     try {
-      final response = await client.get('/orders');
+      final response = await _dio.get('/orders');
 
       List json = response.data;
-      List<OrderModel> data = json.map((e) => OrderModel.fromJson(e)).toList();
+      List<OrderDTO> data = json.map((e) => OrderDTO.fromJson(e)).toList();
 
       return Right(data);
     } catch (ex) {
-      throw Left(handleException(ex));
+      rethrow;
     }
   }
 }

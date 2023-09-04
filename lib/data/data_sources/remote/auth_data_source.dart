@@ -1,39 +1,61 @@
-import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:mplus_app/data/dto/user_dto.dart';
+import 'package:mplus_app/injection.dart';
 
-import '../../../domain/data_sources/auth_data_source.dart';
-import '../../exception.dart';
-import '../../failure.dart';
-import '../../models/auth/auth_request_model.dart';
-import '../../models/auth/auth_response_model.dart';
-import '../../models/auth/signup_employee_request_model.dart';
-import 'rest_service.dart';
+abstract class AuthDataSource {
+  Future<UserDTO> signIn({required String username, required String password});
+  Future<bool> signOut();
+  Future<bool> signUpEmployee({
+    required String employeeId,
+    required String email,
+    required String password,
+  });
+}
 
 class AuthDataSourceImpl implements AuthDataSource {
-  final client = DioClient().init();
+  final _dio = service.get<Dio>();
 
   @override
-  Future<Either<Failure, AuthResponse>> signIn(AuthRequest request) async {
+  Future<UserDTO> signIn(
+      {required String username, required String password}) async {
     try {
-      final response =
-          await client.post('/auth/signin', data: request.toJson());
+      final response = await _dio.post('/auth/signin', data: {
+        // 'username': username,
+        // 'password': password,
+        'username': 'PornsudN',
+        'password': 'Borneo@990990',
+      });
 
-      final authResponse = AuthResponse.fromJson(response.data);
-
-      return Right(authResponse);
-    } catch (e) {
-      throw Left(handleException(e));
+      return UserDTO.fromJson(response.data);
+    } catch (ex) {
+      rethrow;
     }
   }
 
   @override
-  Future<Either<Failure, bool>> signUpEmployee(
-      SignUpEmployeeRequest request) async {
+  Future<bool> signUpEmployee({
+    required String employeeId,
+    required String email,
+    required String password,
+  }) async {
     try {
-      await client.put('/auth/signup?type=employee', data: request.toJson());
+      await _dio.put('/auth/signup', queryParameters: {
+        'type': 'employee'
+      }, data: {
+        'employeeId': employeeId,
+        'email': email,
+        'password': password,
+      });
 
-      return const Right(true);
-    } catch (e) {
-      throw Left(handleException(e));
+      return true;
+    } catch (ex) {
+      rethrow;
     }
+  }
+
+  @override
+  Future<bool> signOut() {
+    // TODO: implement signOut
+    throw UnimplementedError();
   }
 }

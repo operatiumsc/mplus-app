@@ -1,12 +1,13 @@
-import 'package:dartz/dartz.dart';
-import 'package:mplus_app/data/failure.dart';
-import 'package:mplus_app/data/models/auth/auth_response_model.dart';
-
-import '../entities/signin_params.dart';
+import 'package:mplus_app/domain/entities/user.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, AuthResponse>> signIn(SignInParams params);
+  Future<User> signIn({required String username, required String password});
 
-  Future<Either<Failure, bool>> signUpEmployee(
-      String employeeId, String email, String password);
+  Future<bool> signOut();
+
+  Future<bool> signUpEmployee({
+    required String employeeId,
+    required String email,
+    required String password,
+  });
 }

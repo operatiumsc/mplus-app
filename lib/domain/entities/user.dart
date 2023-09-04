@@ -8,6 +8,8 @@ class User {
   String? subType;
   String? subTypeRefId;
   DateTime? passwordLastUpdatedAt;
+  String? accessToken;
+  String? refreshToken;
 
   User({
     this.uuid,
@@ -19,29 +21,7 @@ class User {
     this.subType,
     this.subTypeRefId,
     this.passwordLastUpdatedAt,
+    this.accessToken,
+    this.refreshToken,
   });
-
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        uuid: json["uuid"],
-        email: json["email"],
-        name: json["name"],
-        avatar: json["avatar"],
-        type: json["type"],
-        typeRefId: json["typeRefId"],
-        subType: json["subType"],
-        subTypeRefId: json["subTypeRefId"],
-        passwordLastUpdatedAt: DateTime.tryParse(json["passwordLastUpdatedAt"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "uuid": uuid,
-        "email": email,
-        "name": name,
-        "avatar": avatar,
-        "type": type,
-        "typeRefId": typeRefId,
-        "subType": subType,
-        "subTypeRefId": subTypeRefId,
-        "passwordLastUpdatedAt": passwordLastUpdatedAt?.toIso8601String(),
-      };
 }

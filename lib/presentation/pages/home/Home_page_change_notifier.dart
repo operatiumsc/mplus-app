@@ -1,11 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mplus_app/domain/entities/main_menu.dart';
-import 'package:mplus_app/app/pages/invoices_page.dart';
-import 'package:mplus_app/app/pages/purchase_orders_page.dart';
-import 'package:mplus_app/app/pages/quotes_page.dart';
+import 'package:mplus_app/domain/usecases/auth/sign_out_usecase.dart';
+import 'package:mplus_app/presentation/pages/invoices_page.dart';
+import 'package:mplus_app/presentation/pages/purchase_orders_page.dart';
+import 'package:mplus_app/presentation/pages/quotes_page.dart';
 
-class HomeController extends ChangeNotifier {
+class HomePageChangeNotifier extends ChangeNotifier {
+  final SignOutUseCase _signOutUseCase;
+
+  HomePageChangeNotifier({required SignOutUseCase signOutUseCase})
+      : _signOutUseCase = signOutUseCase;
+
   String selectedMenu = 'Sales';
   List<MainMenu> salesMenu = [
     MainMenu(
@@ -33,5 +40,9 @@ class HomeController extends ChangeNotifier {
   onSelectedMenu(int index) {
     currentPageIndex = index;
     notifyListeners();
+  }
+
+  Future performSignOut() async {
+    await _signOutUseCase.call();
   }
 }

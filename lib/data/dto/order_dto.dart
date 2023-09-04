@@ -1,15 +1,4 @@
-// To parse this JSON data, do
-//
-//     final orderModel = orderModelFromJson(jsonString);
-
-import 'dart:convert';
-
-OrderModel orderModelFromJson(String str) =>
-    OrderModel.fromJson(json.decode(str));
-
-String orderModelToJson(OrderModel data) => json.encode(data.toJson());
-
-class OrderModel {
+class OrderDTO {
   int? id;
   int? subOrderId;
   int? status;
@@ -55,7 +44,7 @@ class OrderModel {
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  OrderModel({
+  OrderDTO({
     this.id,
     this.subOrderId,
     this.status,
@@ -102,7 +91,7 @@ class OrderModel {
     this.updatedAt,
   });
 
-  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+  factory OrderDTO.fromJson(Map<String, dynamic> json) => OrderDTO(
         id: json["id"],
         subOrderId: json["subOrderId"],
         status: json["status"],

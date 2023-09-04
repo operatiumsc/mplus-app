@@ -1,33 +1,43 @@
-import 'package:dartz/dartz.dart';
-
-import 'package:mplus_app/data/failure.dart';
-import 'package:mplus_app/data/models/auth/auth_request_model.dart';
-import 'package:mplus_app/data/models/auth/auth_response_model.dart';
-import 'package:mplus_app/data/models/auth/signup_employee_request_model.dart';
+import 'package:mplus_app/data/data_sources/local/local_storage_service.dart';
+import 'package:mplus_app/data/data_sources/remote/auth_data_source.dart';
+import 'package:mplus_app/data/dto/user_dto.dart';
+import 'package:mplus_app/domain/entities/user.dart';
 import 'package:mplus_app/domain/repositories/auth_repository.dart';
 
-import '../../domain/data_sources/auth_data_source.dart';
-import '../../domain/entities/signin_params.dart';
-
-
 class AuthRepositoryImpl implements AuthRepository {
-  AuthRepositoryImpl(this.authDataSource);
-  final AuthDataSource authDataSource;
+  final AuthDataSource _authDatasource;
+  final LocalStorageService _localStorageService;
+
+  AuthRepositoryImpl(
+      {required AuthDataSource authDataSource,
+      required LocalStorageService localStorageService})
+      : _authDatasource = authDataSource,
+        _localStorageService = localStorageService;
 
   @override
-  Future<Either<Failure, AuthResponse>> signIn(SignInParams params) async {
-    final authRequest =
-        AuthRequest(username: params.username, password: params.password);
-
-    return authDataSource.signIn(authRequest);
+  Future<bool> signOut() async {
+    await _localStorageService.clearCachedUser();
+    return true;
   }
 
   @override
-  Future<Either<Failure, bool>> signUpEmployee(
-      String employeeId, String email, String password) async {
-    final request = SignUpEmployeeRequest(
-        employeeId: employeeId, email: email, password: password);
+  Future<User> signIn(
+      {required String username, required String password}) async {
+    final userDTO =
+        await _authDatasource.signIn(username: username, password: password);
 
-    return authDataSource.signUpEmployee(request);
+    await _localStorageService.cacheUser(user: userDTO);
+    
+    final user = userDTO.toEntity();
+    return user;
+  }
+
+  @override
+  Future<bool> signUpEmployee(
+      {required String employeeId,
+      required String email,
+      required String password}) {
+    // TODO: implement signUpEmployee
+    throw UnimplementedError();
   }
 }
