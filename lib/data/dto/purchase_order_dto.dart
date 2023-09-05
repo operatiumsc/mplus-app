@@ -1,4 +1,6 @@
-class OrderDTO {
+import 'package:mplus_app/domain/entities/purchase_order.dart';
+
+class PurchaseOrderDTO {
   int? id;
   int? subOrderId;
   int? status;
@@ -44,7 +46,7 @@ class OrderDTO {
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  OrderDTO({
+  PurchaseOrderDTO({
     this.id,
     this.subOrderId,
     this.status,
@@ -91,7 +93,8 @@ class OrderDTO {
     this.updatedAt,
   });
 
-  factory OrderDTO.fromJson(Map<String, dynamic> json) => OrderDTO(
+  factory PurchaseOrderDTO.fromJson(Map<String, dynamic> json) =>
+      PurchaseOrderDTO(
         id: json["id"],
         subOrderId: json["subOrderId"],
         status: json["status"],
@@ -109,10 +112,8 @@ class OrderDTO {
         grandTotal: json["grandTotal"]?.toDouble(),
         appliedPromo: json["appliedPromo"],
         appliedPromoBy: json["appliedPromoBy"],
-        appliedPromoAt:
-            json["appliedPromoAt"] ?? DateTime.tryParse(json["appliedPromoAt"]),
-        confirmedAt:
-            json["confirmedAt"] ?? DateTime.tryParse(json["confirmedAt"]),
+        appliedPromoAt: DateTime.tryParse(json["appliedPromoAt"] ?? ''),
+        confirmedAt: DateTime.tryParse(json["confirmedAt"] ?? ''),
         salesRepId: json["salesRepId"],
         salesUnitId: json["salesUnitId"],
         customerId: json["customerId"],
@@ -123,8 +124,7 @@ class OrderDTO {
         customerPostalCode: json["customerPostalCode"],
         warehouse: json["warehouse"],
         isDirectDelivery: json["isDirectDelivery"],
-        requestShipDate: json["requestShipDate"] ??
-            DateTime.tryParse(json["requestShipDate"]),
+        requestShipDate: DateTime.tryParse(json["requestShipDate"] ?? ''),
         shipToName: json["shipToName"],
         shipToAddress: json["shipToAddress"],
         shipToZipCode: json["shipToZipCode"],
@@ -137,8 +137,8 @@ class OrderDTO {
         memo2: json["memo2"],
         memo3: json["memo3"],
         memo4: json["memo4"],
-        createdAt: json["createdAt"] ?? DateTime.tryParse(json["createdAt"]),
-        updatedAt: json["updatedAt"] ?? DateTime.tryParse(json["updatedAt"]),
+        createdAt: DateTime.tryParse(json["createdAt"] ?? ''),
+        updatedAt: DateTime.tryParse(json["updatedAt"] ?? ''),
       );
 
   Map<String, dynamic> toJson() => {
@@ -187,4 +187,53 @@ class OrderDTO {
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
       };
+}
+
+extension PurchaseOrderMapper on PurchaseOrderDTO {
+  PurchaseOrder toEntity() => PurchaseOrder(
+        id: id,
+        subOrderId: subOrderId,
+        status: status,
+        axSalesId: axSalesId,
+        axSalesStatus: axSalesStatus,
+        isSplitted: isSplitted,
+        originOrderId: originOrderId,
+        isEcom: isEcom,
+        isEcomOriginOrder: isEcomOriginOrder,
+        ecomOrderId: ecomOrderId,
+        ecomOrderNo: ecomOrderNo,
+        totalAmount: totalAmount,
+        totalDiscount: totalDiscount,
+        vat: vat,
+        grandTotal: grandTotal,
+        appliedPromo: appliedPromo,
+        appliedPromoBy: appliedPromoBy,
+        appliedPromoAt: appliedPromoAt,
+        confirmedAt: confirmedAt,
+        salesRepId: salesRepId,
+        salesUnitId: salesUnitId,
+        customerId: customerId,
+        customerGroup: customerGroup,
+        customerWarehouse: customerWarehouse,
+        customerName: customerName,
+        customerAddress: customerAddress,
+        customerPostalCode: customerPostalCode,
+        warehouse: warehouse,
+        isDirectDelivery: isDirectDelivery,
+        requestShipDate: requestShipDate,
+        shipToName: shipToName,
+        shipToAddress: shipToAddress,
+        shipToZipCode: shipToZipCode,
+        destinationCode: destinationCode,
+        routeG: routeG,
+        paymentTermId: paymentTermId,
+        paymentMode: paymentMode,
+        creditMemo: creditMemo,
+        memo1: memo1,
+        memo2: memo2,
+        memo3: memo3,
+        memo4: memo4,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
 }

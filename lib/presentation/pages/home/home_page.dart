@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mplus_app/presentation/pages/signin/signin_page.dart';
 import 'package:mplus_app/presentation/widgets/text_hover_builder.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,7 @@ class __HomeViewState extends State<_HomeView> {
     return Scaffold(
       key: scaffoldStateKey,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         leading: Row(
           children: [
             PopupMenuButton(

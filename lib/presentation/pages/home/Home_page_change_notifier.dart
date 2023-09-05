@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mplus_app/domain/entities/main_menu.dart';
 import 'package:mplus_app/domain/usecases/auth/sign_out_usecase.dart';
 import 'package:mplus_app/presentation/pages/invoices_page.dart';
-import 'package:mplus_app/presentation/pages/purchase_orders_page.dart';
+import 'package:mplus_app/presentation/pages/purchase_orders/purchase_orders_page.dart';
 import 'package:mplus_app/presentation/pages/quotes_page.dart';
 
 class HomePageChangeNotifier extends ChangeNotifier {

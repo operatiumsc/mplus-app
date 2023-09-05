@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mplus_app/data/data_sources/remote/auth_data_source.dart';
 import 'package:mplus_app/data/repositories/auth_repository_impl.dart';
@@ -56,8 +57,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+            systemOverlayStyle: const SystemUiOverlayStyle().copyWith(
+          statusBarColor: Colors.transparent,
+        )),
         primarySwatch: Colors.blue,
-        textTheme: GoogleFonts.interTextTheme(),
+        textTheme: GoogleFonts.notoSansThaiTextTheme(),
       ),
       home: Consumer<SignInPageChangeNotifier>(
         builder: (_, notifier, __) {
