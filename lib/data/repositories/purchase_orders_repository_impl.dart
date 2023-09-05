@@ -1,6 +1,8 @@
 import 'package:mplus_app/data/data_sources/remote/sales/purchase_orders_data_source.dart';
 import 'package:mplus_app/data/dto/purchase_order_dto.dart';
+import 'package:mplus_app/data/dto/purchase_order_line_dto.dart';
 import 'package:mplus_app/domain/entities/purchase_order.dart';
+import 'package:mplus_app/domain/entities/purchase_order_line.dart';
 import 'package:mplus_app/domain/repositories/purchase_orders_repository.dart';
 
 class PurchaseOrdersRepositoryImpl implements PurchaseOrdersRepository {
@@ -12,19 +14,17 @@ class PurchaseOrdersRepositoryImpl implements PurchaseOrdersRepository {
 
   @override
   Future<List<PurchaseOrder>> getPurchaseOrders({int? page}) async {
-    try {
-      final orderDTOs =
-          await _purchaseOrdersDataSource.getPurchaseOrders(page: page);
+    final orderDTOs =
+        await _purchaseOrdersDataSource.getPurchaseOrders(page: page);
 
-      return orderDTOs.map((e) => e.toEntity()).toList();
-    } catch (ex) {
-      rethrow;
-    }
+    return orderDTOs.map((e) => e.toEntity()).toList();
   }
 
   @override
-  Future getPurchaseOrderDetails(String orderId) {
-    // TODO: implement getPurchaseOrderDetails
-    throw UnimplementedError();
+  Future<List<PurchaseOrderLine>> getPurchaseOrderLines(
+      {required int orderId}) async {
+    final orderLines =
+        await _purchaseOrdersDataSource.getPurchaseOrderLines(orderId: orderId);
+    return orderLines.map((e) => e.toEntity()).toList();
   }
 }

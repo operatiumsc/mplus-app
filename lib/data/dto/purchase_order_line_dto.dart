@@ -4,6 +4,9 @@ class PurchaseOrderLineDTO {
   int? orderId;
   int? lineNum;
   String? itemId;
+  String? itemName;
+  String? itemClass;
+  String? costCenter;
   String? description;
   String? unit;
   int? quantity;
@@ -27,6 +30,9 @@ class PurchaseOrderLineDTO {
     this.orderId,
     this.lineNum,
     this.itemId,
+    this.itemName,
+    this.itemClass,
+    this.costCenter,
     this.description,
     this.unit,
     this.quantity,
@@ -52,6 +58,9 @@ class PurchaseOrderLineDTO {
         orderId: json["orderId"],
         lineNum: json["lineNum"],
         itemId: json["itemId"],
+        itemName: json["item"]["name"],
+        itemClass: json["item"]["itemClass"],
+        costCenter: json["item"]["costCenter"],
         description: json["description"],
         unit: json["unit"],
         quantity: json["quantity"],
@@ -76,6 +85,9 @@ class PurchaseOrderLineDTO {
         "orderId": orderId,
         "lineNum": lineNum,
         "itemId": itemId,
+        "name": itemName,
+        "itemClass": itemClass,
+        "costCenter": costCenter,
         "description": description,
         "unit": unit,
         "quantity": quantity,
@@ -102,6 +114,9 @@ extension PurchaseOrderLineMapper on PurchaseOrderLineDTO {
         orderId: orderId,
         lineNum: lineNum,
         itemId: itemId,
+        itemName: itemName,
+        itemClass: itemClass,
+        costCenter: costCenter,
         description: description,
         unit: unit,
         quantity: quantity,

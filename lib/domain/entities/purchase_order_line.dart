@@ -2,6 +2,9 @@ class PurchaseOrderLine {
   int? orderId;
   int? lineNum;
   String? itemId;
+  String? itemName;
+  String? itemClass;
+  String? costCenter;
   String? description;
   String? unit;
   int? quantity;
@@ -25,6 +28,9 @@ class PurchaseOrderLine {
     this.orderId,
     this.lineNum,
     this.itemId,
+    this.itemName,
+    this.itemClass,
+    this.costCenter,
     this.description,
     this.unit,
     this.quantity,
