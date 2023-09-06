@@ -13,7 +13,7 @@ class PurchaseOrderDTO {
   int? ecomOrderId;
   String? ecomOrderNo;
   double? totalAmount;
-  int? totalDiscount;
+  double? totalDiscount;
   double? vat;
   double? grandTotal;
   bool? appliedPromo;
@@ -107,7 +107,7 @@ class PurchaseOrderDTO {
         ecomOrderId: json["ecomOrderId"],
         ecomOrderNo: json["ecomOrderNo"],
         totalAmount: json["totalAmount"]?.toDouble(),
-        totalDiscount: json["totalDiscount"],
+        totalDiscount: json["totalDiscount"]?.toDouble(),
         vat: json["vat"]?.toDouble(),
         grandTotal: json["grandTotal"]?.toDouble(),
         appliedPromo: json["appliedPromo"],

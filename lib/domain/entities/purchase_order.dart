@@ -11,7 +11,7 @@ class PurchaseOrder {
   int? ecomOrderId;
   String? ecomOrderNo;
   double? totalAmount;
-  int? totalDiscount;
+  double? totalDiscount;
   double? vat;
   double? grandTotal;
   bool? appliedPromo;

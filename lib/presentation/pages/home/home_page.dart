@@ -44,6 +44,8 @@ class __HomeViewState extends State<_HomeView> {
     return Scaffold(
       key: scaffoldStateKey,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Color(0xFF003B73),
         systemOverlayStyle: SystemUiOverlayStyle.light,
         leading: Row(
           children: [
@@ -70,7 +72,10 @@ class __HomeViewState extends State<_HomeView> {
             ),
             Text(
               context.watch<HomePageChangeNotifier>().selectedMenu,
-              style: const TextStyle(fontSize: 18),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(
               width: 8,
@@ -79,19 +84,29 @@ class __HomeViewState extends State<_HomeView> {
               children: homeController.currentSelectedMenu
                   .map((e) => Visibility(
                         visible: e.isVisible,
-                        child: TextHoverBuilder(
-                          builder: (isHovered) => TextButton(
-                              onPressed: () {
-                                pageController.jumpToPage(homeController
-                                    .currentSelectedMenu
-                                    .indexOf(e));
-                              },
-                              child: Text(
-                                e.menu!,
-                                style: isHovered
-                                    ? hoverTextStyle
-                                    : normalTextStyle,
-                              )),
+                        child: ChoiceChip(
+                          selected: homeController.currentPageIndex ==
+                              homeController.currentSelectedMenu.indexOf(e),
+                          onSelected: (value) {
+                            pageController.jumpToPage(
+                                homeController.currentSelectedMenu.indexOf(e));
+                          },
+                          selectedColor: homeController.currentPageIndex ==
+                                  homeController.currentSelectedMenu.indexOf(e)
+                              ? Color(0xFF0074B7)
+                              : Colors.transparent,
+                          backgroundColor: Color(0xFF003B73),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          label: Text(
+                            e.menu!,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ))
                   .toList(),

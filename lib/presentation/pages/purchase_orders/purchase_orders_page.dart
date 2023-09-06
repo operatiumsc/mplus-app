@@ -43,130 +43,61 @@ class _PurchaseOrdersView extends HookWidget {
       context.read<PurchaseOrdersChangeNotifier>().onInit();
     });
 
-    return Scaffold(
-      body: Consumer<PurchaseOrdersChangeNotifier>(
-        builder: (_, notifier, __) {
-          if (notifier.purchaseOrderViewStatus ==
-              PurchaseOrderViewStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          } else if (notifier.purchaseOrderViewStatus ==
-              PurchaseOrderViewStatus.failed) {
-            return const Text('error');
-          } else {
-            return RefreshIndicator.adaptive(
-              onRefresh: () => notifier.onRefreshedPage(),
-              child: Scrollbar(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  itemCount: notifier.purchaseOrders.length,
-                  itemBuilder: (_, index) {
-                    if (index == 0) {
-                      return Column(
-                        children: [
-                          const _PurchaseOrderHeader(),
-                          _PurchaseOrderItem(
-                            purchaseOrder: notifier.purchaseOrders[index],
-                          ),
-                        ],
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFF003B73),
+            Color(0xFF0074B7),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Consumer<PurchaseOrdersChangeNotifier>(
+          builder: (_, notifier, __) {
+            if (notifier.purchaseOrderViewStatus ==
+                PurchaseOrderViewStatus.loading) {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            } else if (notifier.purchaseOrderViewStatus ==
+                PurchaseOrderViewStatus.failed) {
+              return const Text('error');
+            } else {
+              return RefreshIndicator.adaptive(
+                onRefresh: () => notifier.onRefreshedPage(),
+                child: Scrollbar(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: notifier.purchaseOrders.length,
+                    itemBuilder: (_, index) {
+                      // if (index == 0) {
+                      //   return Column(
+                      //     children: [
+                      //       const _PurchaseOrderHeader(),
+                      //       _PurchaseOrderItem(
+                      //         purchaseOrder: notifier.purchaseOrders[index],
+                      //       ),
+                      //     ],
+                      //   );
+                      // }
+                      return _PurchaseOrderItem(
+                        purchaseOrder: notifier.purchaseOrders[index],
                       );
-                    }
-                    return _PurchaseOrderItem(
-                      purchaseOrder: notifier.purchaseOrders[index],
-                    );
-                  },
+                    },
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  ),
                 ),
-              ),
-            );
-          }
-        },
+              );
+            }
+          },
+        ),
       ),
     );
   }
-}
-
-class _PurchaseOrderHeader extends StatelessWidget {
-  const _PurchaseOrderHeader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Row(
-        children: [
-          _gap,
-          Expanded(
-            flex: 3,
-            child: Text(
-              'Created Date',
-              style: _textStyle,
-            ),
-          ),
-          _gap,
-          Expanded(
-            child: Text(
-              'Status',
-              style: _textStyle,
-            ),
-          ),
-          _gap,
-          Expanded(
-            flex: 2,
-            child: Text(
-              'AX Sales ID',
-              style: _textStyle,
-            ),
-          ),
-          _gap,
-          Expanded(
-            flex: 2,
-            child: Text(
-              'Salesperson',
-              style: _textStyle,
-            ),
-          ),
-          _gap,
-          Expanded(
-            flex: 2,
-            child: Text(
-              'Customer',
-              style: _textStyle,
-            ),
-          ),
-          _gap,
-          Expanded(
-            flex: 8,
-            child: Text(
-              'Customer Name',
-              style: _textStyle,
-            ),
-          ),
-          _gap,
-          Expanded(
-            flex: 3,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Total Amount (VAT)',
-                style: _textStyle,
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          _gap
-        ],
-      ),
-    );
-  }
-
-  final _textStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
-
-  static const _gap = SizedBox(
-    width: 8,
-    height: 8,
-  );
 }
 
 class _PurchaseOrderItem extends StatelessWidget {
@@ -176,12 +107,16 @@ class _PurchaseOrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
+          collapsedIconColor: Colors.white,
+          backgroundColor: Color(0xFF0074B7),
           onExpansionChanged: (isExpanded) {
             if (isExpanded) {
               context
@@ -192,49 +127,135 @@ class _PurchaseOrderItem extends StatelessWidget {
           title: Container(
             padding: const EdgeInsets.all(8.0),
             width: double.infinity,
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    _purchaseOrder.createdAt != null
-                        ? DateFormat('dd/MM/yy HH:mm:ss')
-                            .format(_purchaseOrder.createdAt!)
-                        : '-',
-                  ),
-                ),
-                _gap,
-                PurchaseOrderStatusIcon(status: _purchaseOrder.status),
-                _gap,
-                Expanded(
-                  flex: 2,
-                  child: Text(_purchaseOrder.axSalesId ?? ''),
-                ),
-                _gap,
-                Expanded(
-                  flex: 2,
-                  child: Text(_purchaseOrder.salesRepId ?? ''),
-                ),
-                _gap,
-                Expanded(
-                  flex: 2,
-                  child: Text(_purchaseOrder.customerId ?? ''),
-                ),
-                _gap,
-                Expanded(
-                  flex: 8,
-                  child: Text(_purchaseOrder.customerName ?? ''),
-                ),
-                _gap,
-                Expanded(
-                  flex: 3,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      NumberFormat.simpleCurrency(locale: 'th-TH')
-                          .format(_purchaseOrder.grandTotal),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        'Created Date',
+                        style: _headerTextStyle,
+                      ),
                     ),
-                  ),
+                    _gap,
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'Status',
+                          style: _headerTextStyle,
+                        ),
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        'AX Sales ID',
+                        style: _headerTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        'Salesperson',
+                        style: _headerTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        'Customer',
+                        style: _headerTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 8,
+                      child: Text(
+                        'Customer Name',
+                        style: _headerTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 3,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Total Amount (VAT)',
+                          style: _headerTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                _gap,
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        _purchaseOrder.createdAt != null
+                            ? DateFormat('dd/MM/yy HH:mm:ss')
+                                .format(_purchaseOrder.createdAt!)
+                            : '-',
+                        style: _dataTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      child: PurchaseOrderStatusIcon(
+                        status: _purchaseOrder.status,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        _purchaseOrder.axSalesId ?? 'pending',
+                        style: _dataTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        _purchaseOrder.salesRepId ?? '',
+                        style: _dataTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        _purchaseOrder.customerId ?? '',
+                        style: _dataTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 8,
+                      child: Text(
+                        _purchaseOrder.customerName ?? '',
+                        style: _dataTextStyle,
+                      ),
+                    ),
+                    _gap,
+                    Expanded(
+                      flex: 3,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          NumberFormat.simpleCurrency(locale: 'th-TH')
+                              .format(_purchaseOrder.grandTotal),
+                          style: _dataTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -251,6 +272,11 @@ class _PurchaseOrderItem extends StatelessWidget {
     width: 8,
     height: 8,
   );
+
+  final _headerTextStyle = const TextStyle(
+      color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold);
+  final _dataTextStyle = const TextStyle(
+      color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal);
 }
 
 class _PurchaseOrderDetails extends StatelessWidget {
@@ -300,7 +326,8 @@ class _PurchaseOrderLineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: Color(0xFFFFFFFF).withOpacity(0.75),
       width: double.infinity,
       child: DataTable(
           columnSpacing: 8,

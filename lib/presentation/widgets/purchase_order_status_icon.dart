@@ -10,17 +10,17 @@ class PurchaseOrderStatusIcon extends StatelessWidget {
     switch (_status) {
       case 0:
         return const Icon(
-          FontAwesomeIcons.circleQuestion,
+          FontAwesomeIcons.solidCircleQuestion,
           color: Colors.blue,
         );
       case 1:
         return const Icon(
-          FontAwesomeIcons.circleExclamation,
+          FontAwesomeIcons.solidCircleDot,
           color: Colors.amber,
         );
       case 2:
         return const Icon(
-          FontAwesomeIcons.circleCheck,
+          FontAwesomeIcons.solidCircleCheck,
           color: Colors.lightGreen,
         );
       case 3:
