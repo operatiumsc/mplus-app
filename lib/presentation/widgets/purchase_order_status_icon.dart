@@ -15,7 +15,7 @@ class PurchaseOrderStatusIcon extends StatelessWidget {
         );
       case 1:
         return const Icon(
-          FontAwesomeIcons.solidCircleDot,
+          FontAwesomeIcons.circleExclamation,
           color: Colors.amber,
         );
       case 2:

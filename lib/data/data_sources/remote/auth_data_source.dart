@@ -22,8 +22,8 @@ class AuthDataSourceImpl implements AuthDataSource {
       final response = await _dio.post('/auth/signin', data: {
         // 'username': username,
         // 'password': password,
-        'username': 'WiranchO',
-        'password': 'Borneo@990997',
+        'username': 'ChainarP',
+        'password': 'Borneo@990556',
       });
 
       return UserDTO.fromJson(response.data);

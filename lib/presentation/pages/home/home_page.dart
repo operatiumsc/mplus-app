@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mplus_app/presentation/colors.dart';
 import 'package:mplus_app/presentation/pages/signin/signin_page.dart';
-import 'package:mplus_app/presentation/widgets/text_hover_builder.dart';
 import 'package:provider/provider.dart';
 
 import 'Home_page_change_notifier.dart';
@@ -29,13 +29,12 @@ class __HomeViewState extends State<_HomeView> {
 
   final pageController = PageController(initialPage: 0, keepPage: true);
 
-  late HomePageChangeNotifier homeController;
+  late HomePageChangeNotifier notifier;
 
   @override
   void initState() {
-    homeController =
-        Provider.of<HomePageChangeNotifier>(context, listen: false);
-    homeController.currentSelectedMenu = homeController.salesMenu;
+    notifier = Provider.of<HomePageChangeNotifier>(context, listen: false);
+    notifier.currentSelectedMenu = notifier.salesMenu;
     super.initState();
   }
 
@@ -45,7 +44,7 @@ class __HomeViewState extends State<_HomeView> {
       key: scaffoldStateKey,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color(0xFF003B73),
+        backgroundColor: AppColors.navyBlue,
         systemOverlayStyle: SystemUiOverlayStyle.light,
         leading: Row(
           children: [
@@ -81,34 +80,41 @@ class __HomeViewState extends State<_HomeView> {
               width: 8,
             ),
             Row(
-              children: homeController.currentSelectedMenu
-                  .map((e) => Visibility(
-                        visible: e.isVisible,
+              children: notifier.currentSelectedMenu
+                  .map(
+                    (e) => Visibility(
+                      visible: e.isVisible,
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          canvasColor: Colors.transparent,
+                        ),
                         child: ChoiceChip(
-                          selected: homeController.currentPageIndex ==
-                              homeController.currentSelectedMenu.indexOf(e),
+                          selected: notifier.currentPageIndex ==
+                              notifier.currentSelectedMenu.indexOf(e),
                           onSelected: (value) {
                             pageController.jumpToPage(
-                                homeController.currentSelectedMenu.indexOf(e));
+                                notifier.currentSelectedMenu.indexOf(e));
                           },
-                          selectedColor: homeController.currentPageIndex ==
-                                  homeController.currentSelectedMenu.indexOf(e)
-                              ? Color(0xFF0074B7)
+                          selectedColor: notifier.currentPageIndex ==
+                                  notifier.currentSelectedMenu.indexOf(e)
+                              ? AppColors.royalBlue
                               : Colors.transparent,
-                          backgroundColor: Color(0xFF003B73),
                           elevation: 0,
+                          backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                           label: Text(
                             e.menu!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
             const Spacer(),
@@ -152,17 +158,12 @@ class __HomeViewState extends State<_HomeView> {
       ),
       body: PageView(
         controller: pageController,
-        onPageChanged: (index) => homeController.onSelectedMenu(index),
-        children: homeController.currentSelectedMenu
+        onPageChanged: (index) => notifier.onSelectedMenu(index),
+        children: notifier.currentSelectedMenu
             .where((e) => e.isVisible)
             .map((e) => e.child ?? Container())
             .toList(),
       ),
     );
   }
-
-  static const normalTextStyle =
-      TextStyle(color: Colors.white, fontWeight: FontWeight.normal);
-  static const hoverTextStyle =
-      TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
 }

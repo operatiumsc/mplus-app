@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mplus_app/app/invoices/presentation/pages/invoice_page.dart';
 import 'package:mplus_app/domain/entities/main_menu.dart';
 import 'package:mplus_app/domain/usecases/auth/sign_out_usecase.dart';
 import 'package:mplus_app/presentation/pages/invoices_page.dart';
@@ -19,7 +20,6 @@ class HomePageChangeNotifier extends ChangeNotifier {
       menu: 'Quotes',
       onTapped: () {},
       child: const QuotesPage(),
-      isVisible: true,
     ),
     MainMenu(
       menu: 'Purchase Orders',
@@ -28,7 +28,7 @@ class HomePageChangeNotifier extends ChangeNotifier {
     ),
     MainMenu(
       menu: 'Invoices',
-      child: const InvoicesPage(),
+      child: const InvoicePage(),
       onTapped: () {},
     ),
   ];

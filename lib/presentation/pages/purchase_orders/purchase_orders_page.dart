@@ -7,6 +7,7 @@ import 'package:mplus_app/domain/entities/purchase_order.dart';
 import 'package:mplus_app/domain/entities/purchase_order_line.dart';
 import 'package:mplus_app/domain/usecases/sales/get_purchase_order_lines_usecase.dart';
 import 'package:mplus_app/domain/usecases/sales/get_purchase_orders_usecase.dart';
+import 'package:mplus_app/presentation/colors.dart';
 import 'package:mplus_app/presentation/pages/purchase_orders/purchase_orders_change_notifier.dart';
 import 'package:mplus_app/presentation/widgets/purchase_order_status_icon.dart';
 import 'package:provider/provider.dart';
@@ -54,47 +55,34 @@ class _PurchaseOrdersView extends HookWidget {
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Consumer<PurchaseOrdersChangeNotifier>(
-          builder: (_, notifier, __) {
-            if (notifier.purchaseOrderViewStatus ==
-                PurchaseOrderViewStatus.loading) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            } else if (notifier.purchaseOrderViewStatus ==
-                PurchaseOrderViewStatus.failed) {
-              return const Text('error');
-            } else {
-              return RefreshIndicator.adaptive(
-                onRefresh: () => notifier.onRefreshedPage(),
-                child: Scrollbar(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: notifier.purchaseOrders.length,
-                    itemBuilder: (_, index) {
-                      // if (index == 0) {
-                      //   return Column(
-                      //     children: [
-                      //       const _PurchaseOrderHeader(),
-                      //       _PurchaseOrderItem(
-                      //         purchaseOrder: notifier.purchaseOrders[index],
-                      //       ),
-                      //     ],
-                      //   );
-                      // }
-                      return _PurchaseOrderItem(
-                        purchaseOrder: notifier.purchaseOrders[index],
-                      );
-                    },
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
-                  ),
+      child: Consumer<PurchaseOrdersChangeNotifier>(
+        builder: (_, notifier, __) {
+          if (notifier.purchaseOrderViewStatus ==
+              PurchaseOrderViewStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          } else if (notifier.purchaseOrderViewStatus ==
+              PurchaseOrderViewStatus.failed) {
+            return const Text('error');
+          } else {
+            return RefreshIndicator.adaptive(
+              onRefresh: () => notifier.onRefreshedPage(),
+              child: Scrollbar(
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: notifier.purchaseOrders.length,
+                  itemBuilder: (_, index) {
+                    return _PurchaseOrderItem(
+                      purchaseOrder: notifier.purchaseOrders[index],
+                    );
+                  },
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
                 ),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -116,7 +104,8 @@ class _PurchaseOrderItem extends StatelessWidget {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           collapsedIconColor: Colors.white,
-          backgroundColor: Color(0xFF0074B7),
+          iconColor: Colors.white,
+          backgroundColor: AppColors.royalBlue,
           onExpansionChanged: (isExpanded) {
             if (isExpanded) {
               context
@@ -216,7 +205,8 @@ class _PurchaseOrderItem extends StatelessWidget {
                       flex: 3,
                       child: Text(
                         _purchaseOrder.axSalesId ?? 'pending',
-                        style: _dataTextStyle,
+                        style: _dataTextStyle.copyWith(
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     _gap,
@@ -327,7 +317,7 @@ class _PurchaseOrderLineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFFFFFFF).withOpacity(0.75),
+      color: Colors.white.withOpacity(0.75),
       width: double.infinity,
       child: DataTable(
           columnSpacing: 8,
