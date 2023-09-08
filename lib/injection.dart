@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mplus_app/data/data_sources/local/local_storage_service.dart';
-import 'package:mplus_app/data/data_sources/remote/client.dart';
+import 'package:mplus_app/core/storage/data/data_source/local_storage_service.dart';
+import 'package:mplus_app/core/rest/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final service = GetIt.instance;

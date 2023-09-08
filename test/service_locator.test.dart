@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mplus_app/data/data_sources/remote/client.dart';
+import 'package:mplus_app/core/rest/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

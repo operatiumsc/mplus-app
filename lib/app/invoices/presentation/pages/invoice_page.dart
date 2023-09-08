@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:mplus_app/app/invoices/domain/entities/invoice.dart';
-import 'package:mplus_app/presentation/colors.dart';
+import 'package:mplus_app/utils/constants/colors.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mplus_app/app/invoices/data/data_sources/invoice_data_source.dart';

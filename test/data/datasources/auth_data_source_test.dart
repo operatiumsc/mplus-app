@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mplus_app/data/data_sources/remote/auth_data_source.dart';
-import 'package:mplus_app/data/data_sources/remote/client.dart';
+import 'package:mplus_app/core/auth/data/data_sources/auth_data_source.dart';
+import 'package:mplus_app/core/rest/client.dart';
 import 'package:mplus_app/injection.dart';
 
 void main() {
