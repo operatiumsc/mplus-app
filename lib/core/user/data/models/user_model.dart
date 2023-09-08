@@ -1,6 +1,6 @@
 import 'package:mplus_app/core/user/domain/entities/user.dart';
 
-class UserDTO {
+class UserModel {
   String? uuid;
   String? email;
   String? name;
@@ -13,7 +13,7 @@ class UserDTO {
   String? accessToken;
   String? refreshToken;
 
-  UserDTO({
+  UserModel({
     this.uuid,
     this.email,
     this.name,
@@ -27,7 +27,7 @@ class UserDTO {
     this.refreshToken,
   });
 
-  factory UserDTO.fromJson(Map<String, dynamic> json) => UserDTO(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         uuid: json["uuid"],
         email: json["email"],
         name: json["name"],
@@ -56,7 +56,7 @@ class UserDTO {
       };
 }
 
-extension UserMapper on UserDTO {
+extension UserMapper on UserModel {
   User toEntity() => User(
         uuid: uuid,
         email: email,

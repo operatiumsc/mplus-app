@@ -1,22 +1,22 @@
-import 'package:mplus_app/core/storage/data/data_source/local_storage_service.dart';
-import 'package:mplus_app/core/auth/data/data_sources/auth_data_source.dart';
-import 'package:mplus_app/core/user/data/models/user_dto.dart';
+import 'package:mplus_app/app/auth/data/data_sources/auth_data_source.dart';
+import 'package:mplus_app/app/auth/domain/repositories/auth_repository.dart';
+import 'package:mplus_app/core/user/data/data_sources/local_user_data_source.dart';
+import 'package:mplus_app/core/user/data/models/user_model.dart';
 import 'package:mplus_app/core/user/domain/entities/user.dart';
-import 'package:mplus_app/core/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource _authDatasource;
-  final LocalStorageService _localStorageService;
+  final LocalUserDataSource _localUserDataSource;
 
   AuthRepositoryImpl(
       {required AuthDataSource authDataSource,
-      required LocalStorageService localStorageService})
+      required LocalUserDataSource localUserDataSource})
       : _authDatasource = authDataSource,
-        _localStorageService = localStorageService;
+        _localUserDataSource = localUserDataSource;
 
   @override
   Future<bool> signOut() async {
-    await _localStorageService.clearCachedUser();
+    await _localUserDataSource.clearCachedUser();
     return true;
   }
 
@@ -26,17 +26,15 @@ class AuthRepositoryImpl implements AuthRepository {
     final userDTO =
         await _authDatasource.signIn(username: username, password: password);
 
-    await _localStorageService.cacheUser(user: userDTO);
-    
+    await _localUserDataSource.cacheUser(user: userDTO);
+
     final user = userDTO.toEntity();
     return user;
   }
 
   @override
   Future<bool> signUpEmployee(
-      {required String employeeId,
-      required String email,
-      required String password}) {
+      {required String employeeId, required String email}) {
     // TODO: implement signUpEmployee
     throw UnimplementedError();
   }

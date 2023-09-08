@@ -8,6 +8,5 @@ abstract class AuthRepository {
   Future<bool> signUpEmployee({
     required String employeeId,
     required String email,
-    required String password,
   });
 }

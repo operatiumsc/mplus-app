@@ -1,4 +1,4 @@
-import 'package:mplus_app/core/auth/domain/repositories/auth_repository.dart';
+import 'package:mplus_app/app/auth/domain/repositories/auth_repository.dart';
 
 class SignInUseCase {
   final AuthRepository _authRepository;

@@ -1,16 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mplus_app/core/storage/data/data_source/local_storage_service.dart';
-import 'package:mplus_app/core/rest/config.dart';
+import 'package:mplus_app/core/user/domain/usecases/get_cached_user_usecase.dart';
 import 'package:mplus_app/injection.dart';
 
 class Client {
   static Dio config() {
     final dio = Dio()
       ..options = BaseOptions(
-        baseUrl: Config.baseUrl,
-        sendTimeout: 5000,
-        receiveTimeout: 5000,
+        baseUrl: 'http://10.0.2.2:3080/api',
+        sendTimeout: 7000,
+        receiveTimeout: 7000,
       )
       ..interceptors.add(_AuthInterceptor());
 
@@ -32,7 +31,7 @@ class _AuthInterceptor extends InterceptorsWrapper {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = service.get<LocalStorageService>().getUser()?.accessToken;
+    final token = service.get<GetCachedUserUseCase>().call()?.accessToken;
 
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -47,6 +46,7 @@ class _AuthInterceptor extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (response.statusCode == 401) {
       //TODO: send refresh token to acquire new auth token.
+
     }
 
     debugPrint(

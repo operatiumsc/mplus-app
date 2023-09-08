@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:mplus_app/core/user/data/models/user_dto.dart';
+import 'package:mplus_app/core/user/data/models/user_model.dart';
 import 'package:mplus_app/injection.dart';
 
 abstract class AuthDataSource {
-  Future<UserDTO> signIn({required String username, required String password});
+  Future<UserModel> signIn(
+      {required String username, required String password});
   Future<bool> signOut();
   Future<bool> signUpEmployee({
     required String employeeId,
@@ -16,7 +17,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   final _dio = service.get<Dio>();
 
   @override
-  Future<UserDTO> signIn(
+  Future<UserModel> signIn(
       {required String username, required String password}) async {
     try {
       final response = await _dio.post('/auth/signin', data: {
@@ -26,7 +27,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         'password': 'Borneo@990556',
       });
 
-      return UserDTO.fromJson(response.data);
+      return UserModel.fromJson(response.data);
     } catch (ex) {
       rethrow;
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mplus_app/core/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:mplus_app/app/auth/domain/usecases/sign_in_usecase.dart';
 
 enum SignInPageStatus { initial, loading, success, failed }
 
@@ -15,6 +15,8 @@ class SignInPageChangeNotifier extends ChangeNotifier {
 
   var pageStatus = SignInPageStatus.initial;
   var authStatus = AuthStatus.unauthenticated;
+
+  bool isVisiblePassword = false;
 
   Future performSignIn(
       {required String username, required String password}) async {
@@ -35,5 +37,10 @@ class SignInPageChangeNotifier extends ChangeNotifier {
 
       debugPrint(ex.toString());
     }
+  }
+
+  void toggleShowPassword() {
+    isVisiblePassword = !isVisiblePassword;
+    notifyListeners();
   }
 }
