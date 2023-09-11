@@ -1,8 +1,8 @@
 import 'package:mplus_app/app/auth/data/data_sources/auth_data_source.dart';
 import 'package:mplus_app/app/auth/domain/repositories/auth_repository.dart';
-import 'package:mplus_app/core/user/data/data_sources/local_user_data_source.dart';
-import 'package:mplus_app/core/user/data/models/user_model.dart';
-import 'package:mplus_app/core/user/domain/entities/user.dart';
+import 'package:mplus_app/app/user/data/data_sources/local_user_data_source.dart';
+import 'package:mplus_app/app/user/data/models/user_model.dart';
+import 'package:mplus_app/app/user/domain/entities/user.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource _authDatasource;
@@ -36,6 +36,12 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> signUpEmployee(
       {required String employeeId, required String email}) {
     // TODO: implement signUpEmployee
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<User> refreshAuth({required String refreshToken}) {
+    // TODO: implement refreshAuth
     throw UnimplementedError();
   }
 }

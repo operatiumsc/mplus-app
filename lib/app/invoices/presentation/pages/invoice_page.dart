@@ -30,7 +30,7 @@ class InvoicePage extends StatelessWidget {
 }
 
 class _InvoiceView extends StatelessWidget {
-  const _InvoiceView({super.key});
+  const _InvoiceView();
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-import 'package:mplus_app/core/user/data/models/user_model.dart';
+import 'package:mplus_app/app/user/data/models/user_model.dart';
 
 class User {
   String? uuid;

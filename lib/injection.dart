@@ -1,29 +1,51 @@
-import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mplus_app/core/rest/client.dart';
-import 'package:mplus_app/core/user/data/data_sources/local_user_data_source.dart';
-import 'package:mplus_app/core/user/data/data_sources/remote_iser_data_source.dart';
-import 'package:mplus_app/core/user/data/repositories/user_repository_impl.dart';
-import 'package:mplus_app/core/user/domain/usecases/get_cached_user_usecase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mplus_app/app/auth/data/data_sources/auth_data_source.dart';
+import 'package:mplus_app/app/auth/data/repositories/auth_repository_impl.dart';
+import 'package:mplus_app/app/auth/domain/repositories/auth_repository.dart';
+import 'package:mplus_app/app/invoices/data/data_sources/invoice_data_source.dart';
+import 'package:mplus_app/app/invoices/data/repositories/invoice_repository_impl.dart';
+import 'package:mplus_app/app/invoices/domain/repositories/invoice_repository.dart';
+import 'package:mplus_app/app/orders/data/data_sources/purchase_orders_data_source.dart';
+import 'package:mplus_app/app/orders/data/repositories/purchase_orders_repository_impl.dart';
+import 'package:mplus_app/app/orders/domain/repositories/purchase_orders_repository.dart';
+import 'package:mplus_app/app/user/data/data_sources/local_user_data_source.dart';
+import 'package:mplus_app/app/user/data/data_sources/remote_iser_data_source.dart';
+import 'package:mplus_app/app/user/data/repositories/user_repository_impl.dart';
+import 'package:mplus_app/app/user/domain/repositories/user_repository.dart';
+import 'package:mplus_app/app/user/domain/usecases/get_cached_user_usecase.dart';
 
 final service = GetIt.instance;
 
-// Services
 Future<void> setUpLocator() async {
-  service.registerSingletonAsync<SharedPreferences>(
-      () => SharedPreferences.getInstance());
-  await service.isReady<SharedPreferences>();
-
-  service.registerSingleton<Dio>(Client.config());
+  // Repositories
+  service.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(
+      localUserDataSource: LocalUserDataSourceImpl(),
+      authDataSource: AuthDataSourceImpl(),
+    ),
+  );
+  service.registerLazySingleton<InvoiceRepository>(
+    () => InvoiceRepositoryImpl(
+      invoiceDataSource: InvoiceDataSourceImpl(),
+    ),
+  );
+  service.registerLazySingleton<PurchaseOrdersRepository>(
+    () => PurchaseOrdersRepositoryImpl(
+      purchaseOrdersDataSource: PurchaseOrdersDataSourceImpl(),
+    ),
+  );
+  service.registerLazySingleton<UserRepository>(
+    () => UserRepositoryImpl(
+      localUserDataSource: LocalUserDataSourceImpl(),
+      remoteUserDataSource: RemoteUserDataSourceImpl(),
+    ),
+  );
 
   // Use cases
-  service.registerLazySingleton<GetCachedUserUseCase>(
+  service.registerSingletonWithDependencies<GetCachedUserUseCase>(
     () => GetCachedUserUseCase(
-      userRepository: UserRepositoryImpl(
-        localUserDataSource: LocalUserDataSourceImpl(),
-        remoteUserDataSource: RemoteUserDataSourceImpl(),
-      ),
+      userRepository: service.get<UserRepository>(),
     ),
+    dependsOn: [UserRepository],
   );
 }

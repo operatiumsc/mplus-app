@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
-import 'package:mplus_app/core/user/data/models/user_model.dart';
-import 'package:mplus_app/injection.dart';
+import 'package:mplus_app/app/user/data/models/user_model.dart';
+import 'package:mplus_app/utils/services/rest.dart';
 
 abstract class RemoteUserDataSource {
   Future<UserModel> getUser();
@@ -9,11 +8,11 @@ abstract class RemoteUserDataSource {
 }
 
 class RemoteUserDataSourceImpl implements RemoteUserDataSource {
-  final _dio = service.get<Dio>();
+  final _client = Rest.client;
 
   @override
   Future<UserModel> getUser() async {
-    final response = await _dio.get('/user/profile');
+    final response = await _client.get('/user/profile');
     return UserModel.fromJson(response.data);
   }
 }

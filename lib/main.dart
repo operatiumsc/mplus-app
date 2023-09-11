@@ -5,18 +5,22 @@ import 'package:mplus_app/app/auth/data/data_sources/auth_data_source.dart';
 import 'package:mplus_app/app/auth/data/repositories/auth_repository_impl.dart';
 import 'package:mplus_app/app/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:mplus_app/app/auth/domain/usecases/sign_out_usecase.dart';
-import 'package:mplus_app/core/user/data/data_sources/local_user_data_source.dart';
+import 'package:mplus_app/app/user/data/data_sources/local_user_data_source.dart';
 import 'package:mplus_app/injection.dart';
 import 'package:mplus_app/app/home/presentation/providers/Home_page_change_notifier.dart';
 import 'package:mplus_app/app/home/presentation/pages/home_page.dart';
 import 'package:mplus_app/app/auth/presentation/login/pages/signin_page.dart';
 import 'package:mplus_app/app/auth/presentation/login/providers/signin_page_change_notifier.dart';
 import 'package:mplus_app/utils/constants/colors.dart';
+import 'package:mplus_app/utils/services/persistent_storage.dart';
+import 'package:mplus_app/utils/services/rest.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await PersistentStorage.init();
+  Rest.init();
   await setUpLocator();
 
   runApp(

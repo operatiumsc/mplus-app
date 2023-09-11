@@ -1,30 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mplus_app/core/user/domain/usecases/get_cached_user_usecase.dart';
+import 'package:mplus_app/app/user/domain/usecases/get_cached_user_usecase.dart';
 import 'package:mplus_app/injection.dart';
 
-class Client {
-  static Dio config() {
-    final dio = Dio()
+class Rest {
+  static late Dio _dio;
+
+  static void init() {
+    _dio = Dio()
       ..options = BaseOptions(
         baseUrl: 'http://10.0.2.2:3080/api',
         sendTimeout: 7000,
         receiveTimeout: 7000,
       )
       ..interceptors.add(_AuthInterceptor());
-
-    return dio;
   }
 
-  Future<bool> test() async {
-    try {
-      final dio = Client.config();
-      await dio.get('/test');
-      return true;
-    } catch (ex) {
-      rethrow;
-    }
-  }
+  static Dio get client => _dio;
 }
 
 class _AuthInterceptor extends InterceptorsWrapper {
@@ -46,7 +38,6 @@ class _AuthInterceptor extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (response.statusCode == 401) {
       //TODO: send refresh token to acquire new auth token.
-
     }
 
     debugPrint(

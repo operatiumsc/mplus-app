@@ -1,8 +1,8 @@
-import 'package:mplus_app/core/user/data/data_sources/local_user_data_source.dart';
-import 'package:mplus_app/core/user/data/data_sources/remote_iser_data_source.dart';
-import 'package:mplus_app/core/user/data/models/user_model.dart';
-import 'package:mplus_app/core/user/domain/entities/user.dart';
-import 'package:mplus_app/core/user/domain/repositories/user_repository.dart';
+import 'package:mplus_app/app/user/data/data_sources/local_user_data_source.dart';
+import 'package:mplus_app/app/user/data/data_sources/remote_iser_data_source.dart';
+import 'package:mplus_app/app/user/data/models/user_model.dart';
+import 'package:mplus_app/app/user/domain/entities/user.dart';
+import 'package:mplus_app/app/user/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final LocalUserDataSource _localUserDataSource;
@@ -22,18 +22,18 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<bool> clearCachedUser() async {
-       final response = await _localUserDataSource.clearCachedUser();
+    final response = await _localUserDataSource.clearCachedUser();
     return response;
   }
 
   @override
-  User? getCachedUser() {
+  User getCachedUser() {
     final user = _localUserDataSource.getCachedUser();
-    return user?.toEntity();
+    return user.toEntity();
   }
 
   @override
-  Future<User> getUser() async {
+  Future<User> getRemoteUser() async {
     final user = await _remoteUserDataSource.getUser();
     return user.toEntity();
   }

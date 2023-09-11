@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
-import 'package:mplus_app/core/user/data/models/user_model.dart';
-import 'package:mplus_app/injection.dart';
+import 'package:mplus_app/app/user/data/models/user_model.dart';
+import 'package:mplus_app/utils/helpers/exception.dart';
+import 'package:mplus_app/utils/services/rest.dart';
 
 abstract class AuthDataSource {
   Future<UserModel> signIn(
@@ -14,23 +14,24 @@ abstract class AuthDataSource {
 }
 
 class AuthDataSourceImpl implements AuthDataSource {
-  final _dio = service.get<Dio>();
+  final _dio = Rest.client;
 
   @override
   Future<UserModel> signIn(
       {required String username, required String password}) async {
-    try {
-      final response = await _dio.post('/auth/signin', data: {
-        // 'username': username,
-        // 'password': password,
-        'username': 'ChainarP',
-        'password': 'Borneo@990556',
-      });
+    final response = await _dio.post(
+      '/auth/signin',
+      data: {
+        'username': username,
+        'password': password,
+      },
+    );
 
-      return UserModel.fromJson(response.data);
-    } catch (ex) {
-      rethrow;
+    if (response.statusCode == 401) {
+      throw UnauthorizedException(message: response.data);
     }
+
+    return UserModel.fromJson(response.data);
   }
 
   @override
