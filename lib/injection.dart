@@ -18,8 +18,8 @@ final service = GetIt.instance;
 
 Future<void> setUpLocator() async {
   // Repositories
-  service.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
+  service.registerSingleton<AuthRepository>(
+    AuthRepositoryImpl(
       localUserDataSource: LocalUserDataSourceImpl(),
       authDataSource: AuthDataSourceImpl(),
     ),

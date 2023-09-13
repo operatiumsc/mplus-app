@@ -23,7 +23,7 @@ class _AuthInterceptor extends InterceptorsWrapper {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = service.get<GetCachedUserUseCase>().call()?.accessToken;
+    final token = service.get<GetCachedUserUseCase>().call().accessToken;
 
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';

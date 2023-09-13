@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mplus_app/app/auth/data/data_sources/auth_data_source.dart';
-import 'package:mplus_app/app/auth/data/repositories/auth_repository_impl.dart';
+import 'package:mplus_app/app/auth/domain/repositories/auth_repository.dart';
 import 'package:mplus_app/app/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:mplus_app/app/auth/domain/usecases/sign_out_usecase.dart';
-import 'package:mplus_app/app/user/data/data_sources/local_user_data_source.dart';
 import 'package:mplus_app/injection.dart';
 import 'package:mplus_app/app/home/presentation/providers/Home_page_change_notifier.dart';
 import 'package:mplus_app/app/home/presentation/pages/home_page.dart';
@@ -29,31 +27,25 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => SignInPageChangeNotifier(
             signInUseCase: SignInUseCase(
-              authRepository: AuthRepositoryImpl(
-                authDataSource: AuthDataSourceImpl(),
-                localUserDataSource: LocalUserDataSourceImpl(),
-              ),
+              authRepository: service.get<AuthRepository>(),
             ),
           ),
         ),
         ChangeNotifierProvider(
           create: (_) => HomePageChangeNotifier(
             signOutUseCase: SignOutUseCase(
-              authRepository: AuthRepositoryImpl(
-                authDataSource: AuthDataSourceImpl(),
-                localUserDataSource: LocalUserDataSourceImpl(),
-              ),
+              authRepository: service.get<AuthRepository>(),
             ),
           ),
         ),
       ],
-      child: const MyApp(),
+      child: const App(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
