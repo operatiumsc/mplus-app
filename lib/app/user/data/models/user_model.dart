@@ -67,5 +67,7 @@ extension UserMapper on UserModel {
         subType: subType,
         subTypeRefId: subTypeRefId,
         passwordLastUpdatedAt: DateTime.tryParse(passwordLastUpdatedAt ?? ''),
+        accessToken: accessToken,
+        refreshToken: refreshToken,
       );
 }

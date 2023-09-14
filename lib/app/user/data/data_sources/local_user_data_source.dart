@@ -1,11 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:mplus_app/app/user/data/models/user_model.dart';
-import 'package:mplus_app/utils/helpers/exception.dart';
-import 'package:mplus_app/injection.dart';
 import 'package:mplus_app/utils/constants/local_storage_keys.dart';
+import 'package:mplus_app/utils/helpers/exception.dart';
 import 'package:mplus_app/utils/services/persistent_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class LocalUserDataSource {
   UserModel getCachedUser();
@@ -19,7 +18,9 @@ class LocalUserDataSourceImpl implements LocalUserDataSource {
   @override
   Future<bool> cacheUser({required UserModel user}) async {
     final json = jsonEncode(user);
+    debugPrint(json);
     final response = await _storage.setString(LocalStorageKeys.user, json);
+
     return response;
   }
 
@@ -32,12 +33,13 @@ class LocalUserDataSourceImpl implements LocalUserDataSource {
   @override
   UserModel getCachedUser() {
     final data = _storage.getString(LocalStorageKeys.user);
+    debugPrint('LocalUserDataSourceImpl.getCachedUser: $data');
 
-    if (data == null) {
+    if (data != null) {
+      final json = jsonDecode(data);
+      return UserModel.fromJson(json);
+    } else {
       throw UserNotFoundException();
     }
-
-    final json = jsonDecode(data);
-    return UserModel.fromJson(json);
   }
 }

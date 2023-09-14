@@ -7,7 +7,7 @@ abstract class InvoiceDataSource {
 }
 
 class InvoiceDataSourceImpl implements InvoiceDataSource {
-  final _client = Rest.client;
+  final _client = Rest().client;
 
   @override
   Future<List<InvoiceDto>> getInvoices({int? page}) async {

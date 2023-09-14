@@ -9,7 +9,7 @@ abstract class PurchaseOrdersDataSource {
 }
 
 class PurchaseOrdersDataSourceImpl implements PurchaseOrdersDataSource {
-  final _client = Rest.client;
+  final _client = Rest().client;
 
   @override
   Future<List<PurchaseOrderDTO>> getPurchaseOrders({int? page}) async {

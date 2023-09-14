@@ -14,36 +14,15 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SignInPageChangeNotifier>(
-      builder: (_, notifier, __) {
-        // if (notifier.authStatus == AuthStatus.authenticated) {
-        //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        //     Navigator.of(context).pushAndRemoveUntil(
-        //         CupertinoPageRoute(builder: (context) => const HomePage()),
-        //         (route) => false);
-        //   });
-        // }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SignInPageChangeNotifier>().init();
+    });
 
-        return const _SignInView();
-      },
-    );
-  }
-}
+    final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+    final signInFormKey = GlobalKey<FormState>();
+    final usernameController = TextEditingController();
+    final passwordController = TextEditingController();
 
-class _SignInView extends StatefulWidget {
-  const _SignInView({super.key});
-
-  @override
-  State<_SignInView> createState() => __SignInViewState();
-}
-
-class __SignInViewState extends State<_SignInView> {
-  final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       body: Center(
@@ -56,7 +35,7 @@ class __SignInViewState extends State<_SignInView> {
               width: 400,
               padding: const EdgeInsets.all(16),
               child: Form(
-                key: context.watch<SignInPageChangeNotifier>().signInFormKey,
+                key: signInFormKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -70,6 +49,7 @@ class __SignInViewState extends State<_SignInView> {
                       decoration: _inputDecoration.copyWith(
                         label: const Text('Username or email'),
                       ),
+                      autofillHints: const [AutofillHints.newUsername],
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
                           RegExp('[a-zA-Z0-9._@]'),
@@ -92,6 +72,7 @@ class __SignInViewState extends State<_SignInView> {
                               onPressed: () => notifier.toggleShowPassword(),
                             ),
                           ),
+                          autofillHints: const [AutofillHints.newPassword],
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
                               RegExp('[a-zA-Z0-9!@#\$]'),
@@ -118,56 +99,56 @@ class __SignInViewState extends State<_SignInView> {
                     ),
                     _gap,
                     SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
+                      width: double.infinity,
+                      child: Consumer<SignInPageChangeNotifier>(
+                        builder: (_, notifier, __) => ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.royalBlue,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          onPressed: () {
-                            context
-                                .read<SignInPageChangeNotifier>()
-                                .performSignIn(
-                                  username: usernameController.text,
-                                  password: passwordController.text,
-                                )
-                                .then((_) {
+                          onPressed: () async {
+                            TextInput.finishAutofillContext();
+                            await notifier.performSignIn(
+                              formKey: signInFormKey,
+                              username: usernameController.text,
+                              password: passwordController.text,
+                            );
+
+                            if (context.mounted &&
+                                notifier.authStatus ==
+                                    AuthStatus.authenticated) {
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(
-                                      builder: (context) => const HomePage()),
-                                  (route) => false);
-                            });
-                          },
-                          child: Consumer<SignInPageChangeNotifier>(
-                              builder: (_, notifier, __) {
-                            if (notifier.authStatus ==
-                                AuthStatus.authenticating) {
-                              return const SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator.adaptive(
-                                  valueColor:
-                                      AlwaysStoppedAnimation(Colors.white),
-                                ),
-                              );
-                            }
-
-                            return const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.login),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Sign in',
+                                    builder: (context) => const HomePage(),
                                   ),
+                                  (route) => false);
+                            }
+                          },
+                          child: notifier.authStatus ==
+                                  AuthStatus.authenticating
+                              ? const SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator.adaptive(
+                                    valueColor:
+                                        AlwaysStoppedAnimation(Colors.white),
+                                  ),
+                                )
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.login),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text('Sign in'),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            );
-                          }),
-                        )),
+                        ),
+                      ),
+                    ),
                     _gap,
                     Consumer<SignInPageChangeNotifier>(
                       builder: (_, notifier, __) {
