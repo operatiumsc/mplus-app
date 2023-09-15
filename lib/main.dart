@@ -8,7 +8,7 @@ import 'package:mplus_app/app/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:mplus_app/app/auth/presentation/splash/splash_screen.dart';
 import 'package:mplus_app/app/user/domain/repositories/user_repository.dart';
 import 'package:mplus_app/injection.dart';
-import 'package:mplus_app/app/home/presentation/providers/Home_page_change_notifier.dart';
+import 'package:mplus_app/app/home/presentation/providers/home_page_change_notifier.dart';
 import 'package:mplus_app/app/home/presentation/pages/home_page.dart';
 import 'package:mplus_app/app/auth/presentation/login/pages/signin_page.dart';
 import 'package:mplus_app/app/auth/presentation/login/providers/signin_page_change_notifier.dart';

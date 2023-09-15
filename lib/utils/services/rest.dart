@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mplus_app/app/auth/domain/usecases/refresh_auth_usecase.dart';
 import 'package:mplus_app/app/user/domain/usecases/get_cached_user_usecase.dart';
 import 'package:mplus_app/injection.dart';
 
 class Rest {
+  static const _baseUrl = 'http://10.0.2.2:3080/api';
+
   Dio get client => Dio()
     ..options = BaseOptions(
-      baseUrl: 'http://10.0.2.2:3080/api',
+      baseUrl: _baseUrl,
       sendTimeout: 7000,
       receiveTimeout: 7000,
     )
@@ -15,7 +16,7 @@ class Rest {
 
   Dio get clientWithRefreshAuth => Dio()
     ..options = BaseOptions(
-      baseUrl: 'http://10.0.2.2:3080/api',
+      baseUrl: _baseUrl,
       sendTimeout: 7000,
       receiveTimeout: 7000,
     )

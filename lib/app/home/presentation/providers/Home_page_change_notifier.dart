@@ -1,11 +1,8 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mplus_app/app/invoices/presentation/pages/invoice_page.dart';
-import 'package:mplus_app/app/home/domain/entities/main_menu.dart';
 import 'package:mplus_app/app/auth/domain/usecases/sign_out_usecase.dart';
-import 'package:mplus_app/app/orders/presentation/pages/purchase_orders_page.dart';
-import 'package:mplus_app/app/quotes/presentation/pages/quotes_page.dart';
+import 'package:mplus_app/app/home/domain/entities/app_module.dart';
+import 'package:mplus_app/app/home/presentation/pages/sales_module.dart';
 
 class HomePageChangeNotifier extends ChangeNotifier {
   final SignOutUseCase _signOutUseCase;
@@ -13,31 +10,41 @@ class HomePageChangeNotifier extends ChangeNotifier {
   HomePageChangeNotifier({required SignOutUseCase signOutUseCase})
       : _signOutUseCase = signOutUseCase;
 
-  String selectedMenu = 'Sales';
-  List<MainMenu> salesMenu = [
-    MainMenu(
-      menu: 'Quotes',
-      onTapped: () {},
-      child: const QuotesPage(),
-    ),
-    MainMenu(
-      menu: 'Purchase Orders',
-      child: const PurchaseOrdersPage(),
-      onTapped: () {},
-    ),
-    MainMenu(
-      menu: 'Invoices',
-      child: const InvoicePage(),
-      onTapped: () {},
+  final List<AppModule> appModules = [
+    AppModule(
+      name: 'Sales',
+      child: const SalesModule(),
+      subModules: [
+        SubModule(name: 'Quotes'),
+        SubModule(name: 'Purchase Orders'),
+        SubModule(name: 'Invoices'),
+        SubModule(name: 'Shipments'),
+      ],
     ),
   ];
 
-  List<MainMenu> currentSelectedMenu = [];
+  int _currentAppModuleIndex = 0;
+  int _currentSubMuduleIndex = 0;
 
-  int currentPageIndex = 0;
+  AppModule get currentModule => appModules[_currentAppModuleIndex];
+  SubModule get currentSubModule =>
+      appModules[_currentAppModuleIndex].subModules[_currentSubMuduleIndex];
+  int get currentSubModuleIndex => _currentSubMuduleIndex;
 
-  onSelectedMenu(int index) {
-    currentPageIndex = index;
+  void selectedAppModule(int index) {
+    _currentAppModuleIndex = index;
+
+    //Reset the current sub-module
+    _currentSubMuduleIndex = 0;
+    notifyListeners();
+  }
+
+  void selectedSubModule(
+      {required PageController pageController, required int index}) {
+    _currentSubMuduleIndex = index;
+
+    pageController.jumpToPage(index);
+
     notifyListeners();
   }
 

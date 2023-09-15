@@ -1,5 +1,5 @@
-import 'package:mplus_app/app/orders/data/models/purchase_order_dto.dart';
-import 'package:mplus_app/app/orders/data/models/purchase_order_line_dto.dart';
+import 'package:mplus_app/app/orders/data/dto/purchase_order_dto.dart';
+import 'package:mplus_app/app/orders/data/dto/purchase_order_line_dto.dart';
 import 'package:mplus_app/utils/services/rest.dart';
 
 abstract class PurchaseOrdersDataSource {

@@ -5,14 +5,13 @@ import 'package:mplus_app/app/auth/data/repositories/auth_repository_impl.dart';
 import 'package:mplus_app/app/auth/domain/repositories/auth_repository.dart';
 import 'package:mplus_app/app/user/data/data_sources/local_user_data_source.dart';
 import 'package:mplus_app/utils/helpers/exception.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('Auth repository test', () {
     WidgetsFlutterBinding.ensureInitialized();
  
 
-    late AuthRepository authRepository;
+    late  AuthRepository authRepository;
 
     setUp(() {
       authRepository = AuthRepositoryImpl(

@@ -30,13 +30,13 @@ class PurchaseOrdersPage extends StatelessWidget {
           ),
         ),
       ),
-      builder: (_, __) => const _PurchaseOrdersView(),
+      builder: (_, __) => const PurchaseOrdersView(),
     );
   }
 }
 
-class _PurchaseOrdersView extends HookWidget {
-  const _PurchaseOrdersView({super.key});
+class PurchaseOrdersView extends HookWidget {
+  const PurchaseOrdersView({super.key});
 
   @override
   Widget build(BuildContext context) {
