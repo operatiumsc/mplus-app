@@ -60,19 +60,27 @@ class ShipmentsView extends StatelessWidget {
                     spacing: 8.0,
                     children: [
                       FilterChip(
-                        selected: true,
-                        label: Text('Currently deliver'),
+                        selected: false,
+                        label: const Text('All'),
                         selectedColor: Colors.lightGreen,
                         onSelected: (isSelected) {},
                       ),
                       FilterChip(
                         selected: false,
-                        label: Text('Completed'),
+                        label: const Text('Ready for picking'),
+                        selectedColor: Colors.lightGreen,
                         onSelected: (isSelected) {},
                       ),
-                      Chip(
-                        avatar: Icon(FontAwesomeIcons.locationCrosshairs),
-                        label: const Text('Order by the nearest me'),
+                      FilterChip(
+                        selected: true,
+                        label: const Text('Currently deliver'),
+                        selectedColor: Colors.lightGreen,
+                        onSelected: (isSelected) {},
+                      ),
+                      FilterChip(
+                        selected: false,
+                        label: const Text('Completed'),
+                        onSelected: (isSelected) {},
                       ),
                     ],
                   ),

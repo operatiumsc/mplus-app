@@ -1,47 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mplus_app/app/orders/data/data_sources/purchase_orders_data_source.dart';
-import 'package:mplus_app/app/orders/data/repositories/purchase_orders_repository_impl.dart';
 import 'package:mplus_app/app/orders/domain/entities/purchase_order.dart';
 import 'package:mplus_app/app/orders/domain/entities/purchase_order_line.dart';
-import 'package:mplus_app/app/orders/domain/usecases/get_purchase_order_lines_usecase.dart';
-import 'package:mplus_app/app/orders/domain/usecases/get_purchase_orders_usecase.dart';
 import 'package:mplus_app/utils/constants/colors.dart';
 import 'package:mplus_app/app/orders/presentation/providers/purchase_orders_change_notifier.dart';
 import 'package:mplus_app/app/orders/presentation/widgets/purchase_order_status_icon.dart';
 import 'package:provider/provider.dart';
 
-class PurchaseOrdersPage extends StatelessWidget {
-  const PurchaseOrdersPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<PurchaseOrdersChangeNotifier>(
-      create: (_) => PurchaseOrdersChangeNotifier(
-        getPurchaseOrdersUseCase: GetPurchaseOrdersUseCase(
-          purchaseOrdersRepository: PurchaseOrdersRepositoryImpl(
-            purchaseOrdersDataSource: PurchaseOrdersDataSourceImpl(),
-          ),
-        ),
-        getPurchaseOrderLinesUseCase: GetPurchaseOrderLinesUseCase(
-          purchaseOrdersRepository: PurchaseOrdersRepositoryImpl(
-            purchaseOrdersDataSource: PurchaseOrdersDataSourceImpl(),
-          ),
-        ),
-      ),
-      builder: (_, __) => const PurchaseOrdersView(),
-    );
-  }
-}
-
-class PurchaseOrdersView extends HookWidget {
+class PurchaseOrdersView extends StatelessWidget {
   const PurchaseOrdersView({super.key});
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PurchaseOrdersChangeNotifier>().onInit();
+      context.read<PurchaseOrdersChangeNotifier>().initPage();
     });
 
     return Container(
@@ -57,32 +30,106 @@ class PurchaseOrdersView extends HookWidget {
       ),
       child: Consumer<PurchaseOrdersChangeNotifier>(
         builder: (_, notifier, __) {
-          if (notifier.purchaseOrderViewStatus ==
-              PurchaseOrderViewStatus.loading) {
+          if (notifier.isLoading) {
             return const Center(
               child: CircularProgressIndicator.adaptive(),
             );
-          } else if (notifier.purchaseOrderViewStatus ==
-              PurchaseOrderViewStatus.failed) {
-            return const Text('error');
-          } else {
-            return RefreshIndicator.adaptive(
-              onRefresh: () => notifier.onRefreshedPage(),
-              child: Scrollbar(
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: notifier.purchaseOrders.length,
-                  itemBuilder: (_, index) {
-                    return _PurchaseOrderItem(
-                      purchaseOrder: notifier.purchaseOrders[index],
-                    );
-                  },
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+          } else if (notifier.isFailed) {
+            return Column(
+              children: [
+                const Text(
+                  'An error occured while loading data.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
+                ElevatedButton.icon(
+                  onPressed: () => notifier.refreshPage(),
+                  icon: const Icon(FontAwesomeIcons.arrowRotateRight),
+                  label: const Text('Try again'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.royalBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+              ],
             );
+          } else {
+            return _OrderListView(orders: notifier.purchaseOrders);
           }
         },
+      ),
+    );
+  }
+}
+
+class _OrderListView extends StatelessWidget {
+  final List<PurchaseOrder> _orders;
+  const _OrderListView({
+    super.key,
+    required List<PurchaseOrder> orders,
+  }) : _orders = orders;
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator.adaptive(
+      onRefresh: () =>
+          context.read<PurchaseOrdersChangeNotifier>().refreshPage(),
+      child: Scrollbar(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              child: Wrap(
+                spacing: 8.0,
+                children: [
+                  ChoiceChip(
+                    selected: true,
+                    label: const Text('All'),
+                    onSelected: (isSelected) {},
+                    selectedColor: AppColors.royalBlue,
+                  ),
+                  ChoiceChip(
+                    selected: false,
+                    label: const Text('Draft'),
+                    onSelected: (isSelected) {},
+                  ),
+                  ChoiceChip(
+                    selected: false,
+                    label: const Text('On approval request'),
+                    onSelected: (isSelected) {},
+                  ),
+                  ChoiceChip(
+                    selected: false,
+                    label: const Text('Promotion Applied'),
+                    onSelected: (isSelected) {},
+                  ),
+                  FilterChip(
+                    selected: false,
+                    label: const Text('e-Commerce orders'),
+                    onSelected: (isSelected) {},
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.all(16),
+                itemCount: _orders.length,
+                itemBuilder: (_, index) {
+                  return _PurchaseOrderItem(
+                    purchaseOrder: _orders[index],
+                  );
+                },
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -110,7 +157,7 @@ class _PurchaseOrderItem extends StatelessWidget {
             if (isExpanded) {
               context
                   .read<PurchaseOrdersChangeNotifier>()
-                  .onExpandedOrder(orderId: _purchaseOrder.id!);
+                  .expandOrder(orderId: _purchaseOrder.id!);
             }
           },
           title: Container(
