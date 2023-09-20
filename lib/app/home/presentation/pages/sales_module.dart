@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:mplus_app/app/home/presentation/providers/home_page_change_notifier.dart';
-import 'package:mplus_app/app/home/presentation/widgets/all_menus_button.dart';
-import 'package:mplus_app/app/home/presentation/widgets/user_avatar_button.dart';
-import 'package:mplus_app/app/invoices/data/data_sources/invoice_data_source.dart';
-import 'package:mplus_app/app/invoices/data/repositories/invoice_repository_impl.dart';
-import 'package:mplus_app/app/invoices/domain/usecases/get_invoices_usecase.dart';
-import 'package:mplus_app/app/invoices/presentation/pages/invoice_page.dart';
-import 'package:mplus_app/app/invoices/presentation/providers/invoice_page_change_notifier.dart';
-import 'package:mplus_app/app/orders/data/data_sources/purchase_orders_data_source.dart';
-import 'package:mplus_app/app/orders/data/repositories/purchase_orders_repository_impl.dart';
-import 'package:mplus_app/app/orders/domain/usecases/get_purchase_order_lines_usecase.dart';
-import 'package:mplus_app/app/orders/domain/usecases/get_purchase_orders_usecase.dart';
-import 'package:mplus_app/app/orders/presentation/pages/purchase_orders_page.dart';
-import 'package:mplus_app/app/orders/presentation/providers/purchase_orders_change_notifier.dart';
-import 'package:mplus_app/app/quotes/domain/repositories/quotes_repository.dart';
-import 'package:mplus_app/app/quotes/domain/usecases/get_quotes_usecase.dart';
-import 'package:mplus_app/app/quotes/presentation/change_notifiers/quotes_change_notifier.dart';
-import 'package:mplus_app/app/quotes/presentation/pages/quotes_page.dart';
-import 'package:mplus_app/app/shipments/domain/repositories/shipments_repository.dart';
-import 'package:mplus_app/app/shipments/domain/usecases/get_shipments_usecase.dart';
-import 'package:mplus_app/app/shipments/presentation/change_notifers/shipments_change_notifier.dart';
-import 'package:mplus_app/app/shipments/presentation/pages/shipments_page.dart';
-import 'package:mplus_app/injection.dart';
-import 'package:mplus_app/utils/constants/colors.dart';
 import 'package:provider/provider.dart';
 
-class SalesModule extends HookWidget {
+import '../../../../injection.dart';
+import '../../../../utils/constants/colors.dart';
+import '../../../invoices/domain/repositories/invoice_repository.dart';
+import '../../../invoices/domain/usecases/get_invoices_usecase.dart';
+import '../../../invoices/presentation/pages/invoice_page.dart';
+import '../../../invoices/presentation/providers/invoice_page_change_notifier.dart';
+import '../../../orders/domain/repositories/purchase_orders_repository.dart';
+import '../../../orders/domain/usecases/get_purchase_order_lines_usecase.dart';
+import '../../../orders/domain/usecases/get_purchase_orders_usecase.dart';
+import '../../../orders/presentation/pages/purchase_orders_page.dart';
+import '../../../orders/presentation/providers/purchase_orders_change_notifier.dart';
+import '../../../quotes/domain/repositories/quotes_repository.dart';
+import '../../../quotes/domain/usecases/get_quotes_usecase.dart';
+import '../../../quotes/presentation/change_notifiers/quotes_change_notifier.dart';
+import '../../../quotes/presentation/pages/quotes_page.dart';
+import '../../../shipments/domain/repositories/shipments_repository.dart';
+import '../../../shipments/domain/usecases/get_shipments_usecase.dart';
+import '../../../shipments/presentation/change_notifers/shipments_change_notifier.dart';
+import '../../../shipments/presentation/pages/shipments_page.dart';
+import '../providers/Home_page_change_notifier.dart';
+import '../widgets/all_menus_button.dart';
+import '../widgets/user_avatar_button.dart';
+
+class SalesModule extends StatelessWidget {
   const SalesModule({super.key});
 
   @override
@@ -44,23 +42,17 @@ class SalesModule extends HookWidget {
         ChangeNotifierProvider<PurchaseOrdersChangeNotifier>(
           create: (_) => PurchaseOrdersChangeNotifier(
             getPurchaseOrdersUseCase: GetPurchaseOrdersUseCase(
-              purchaseOrdersRepository: PurchaseOrdersRepositoryImpl(
-                purchaseOrdersDataSource: PurchaseOrdersDataSourceImpl(),
-              ),
+              purchaseOrdersRepository: service.get<PurchaseOrdersRepository>(),
             ),
             getPurchaseOrderLinesUseCase: GetPurchaseOrderLinesUseCase(
-              purchaseOrdersRepository: PurchaseOrdersRepositoryImpl(
-                purchaseOrdersDataSource: PurchaseOrdersDataSourceImpl(),
-              ),
+              purchaseOrdersRepository: service.get<PurchaseOrdersRepository>(),
             ),
           ),
         ),
         ChangeNotifierProvider<InvoiceChangeNotifier>(
           create: (_) => InvoiceChangeNotifier(
             getInvoicesUseCase: GetInvoicesUseCase(
-              invoiceRepository: InvoiceRepositoryImpl(
-                invoiceDataSource: InvoiceDataSourceImpl(),
-              ),
+              invoiceRepository: service.get<InvoiceRepository>(),
             ),
           ),
         ),

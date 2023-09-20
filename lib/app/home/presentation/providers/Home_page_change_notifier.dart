@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mplus_app/app/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:mplus_app/app/home/domain/entities/app_module.dart';
