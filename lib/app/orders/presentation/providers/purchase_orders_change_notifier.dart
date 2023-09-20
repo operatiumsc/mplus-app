@@ -19,12 +19,18 @@ class PurchaseOrdersChangeNotifier extends ChangeNotifier {
         _getPurchaseOrderLinesUseCase = getPurchaseOrderLinesUseCase;
 
   var purchaseOrderViewStatus = PurchaseOrderViewStatus.initial;
+  bool get isLoading =>
+      purchaseOrderViewStatus == PurchaseOrderViewStatus.loading;
+  bool get isSuccess =>
+      purchaseOrderViewStatus == PurchaseOrderViewStatus.success;
+  bool get isFailed =>
+      purchaseOrderViewStatus == PurchaseOrderViewStatus.failed;
 
   Future<List<PurchaseOrder>>? futurePurchaseOrders;
   List<PurchaseOrder> purchaseOrders = [];
   int pageIndex = 0;
 
-  Future<void> onInit() async {
+  Future<void> initPage() async {
     try {
       purchaseOrderViewStatus = PurchaseOrderViewStatus.loading;
       notifyListeners();
@@ -47,7 +53,7 @@ class PurchaseOrdersChangeNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> onRefreshedPage() async {
+  Future<void> refreshPage() async {
     try {
       purchaseOrderViewStatus = PurchaseOrderViewStatus.loading;
       notifyListeners();
@@ -66,7 +72,7 @@ class PurchaseOrdersChangeNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> onScrollEnd() async {
+  Future<void> handleScroll() async {
     try {
       pageIndex += 1;
       debugPrint(pageIndex.toString());
@@ -88,7 +94,7 @@ class PurchaseOrdersChangeNotifier extends ChangeNotifier {
   Future<List<PurchaseOrderLine>>? futurePurchaseOrderLines;
   List<PurchaseOrderLine> purchaseOrderLines = [];
 
-  Future<void> onExpandedOrder({required int orderId}) async {
+  Future<void> expandOrder({required int orderId}) async {
     try {
       futurePurchaseOrderLines =
           _getPurchaseOrderLinesUseCase.call(orderId: orderId);

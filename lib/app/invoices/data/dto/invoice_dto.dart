@@ -1,6 +1,6 @@
 import 'package:mplus_app/app/invoices/domain/entities/invoice.dart';
 
-class InvoiceDto {
+class InvoiceDTO {
   String? id;
   String? customerId;
   String? axSalesId;
@@ -32,7 +32,7 @@ class InvoiceDto {
   DateTime? createdAt;
   int? overDueDays;
 
-  InvoiceDto({
+  InvoiceDTO({
     required this.id,
     required this.customerId,
     required this.axSalesId,
@@ -65,7 +65,7 @@ class InvoiceDto {
     required this.overDueDays,
   });
 
-  factory InvoiceDto.fromJson(Map<String?, dynamic> json) => InvoiceDto(
+  factory InvoiceDTO.fromJson(Map<String?, dynamic> json) => InvoiceDTO(
         id: json["id"],
         customerId: json["customerId"],
         axSalesId: json["axSalesId"],
@@ -134,7 +134,7 @@ class InvoiceDto {
       };
 }
 
-extension InvoiceMapper on InvoiceDto {
+extension InvoiceMapper on InvoiceDTO {
   Invoice toEntity() => Invoice(
         id: id,
         customerId: customerId,

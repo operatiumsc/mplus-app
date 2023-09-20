@@ -8,7 +8,7 @@ abstract class RemoteUserDataSource {
 }
 
 class RemoteUserDataSourceImpl implements RemoteUserDataSource {
-  final _client = Rest.client;
+  final _client = Rest().client;
 
   @override
   Future<UserModel> getUser() async {

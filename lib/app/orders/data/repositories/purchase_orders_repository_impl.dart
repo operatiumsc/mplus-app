@@ -1,6 +1,6 @@
 import 'package:mplus_app/app/orders/data/data_sources/purchase_orders_data_source.dart';
-import 'package:mplus_app/app/orders/data/models/purchase_order_dto.dart';
-import 'package:mplus_app/app/orders/data/models/purchase_order_line_dto.dart';
+import 'package:mplus_app/app/orders/data/dto/purchase_order_dto.dart';
+import 'package:mplus_app/app/orders/data/dto/purchase_order_line_dto.dart';
 import 'package:mplus_app/app/orders/domain/entities/purchase_order.dart';
 import 'package:mplus_app/app/orders/domain/entities/purchase_order_line.dart';
 import 'package:mplus_app/app/orders/domain/repositories/purchase_orders_repository.dart';

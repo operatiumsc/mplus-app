@@ -24,13 +24,13 @@ class InvoicePage extends StatelessWidget {
           ),
         ),
       ),
-      builder: (_, __) => const _InvoiceView(),
+      builder: (_, __) => const InvoiceView(),
     );
   }
 }
 
-class _InvoiceView extends StatelessWidget {
-  const _InvoiceView();
+class InvoiceView extends StatelessWidget {
+  const InvoiceView();
 
   @override
   Widget build(BuildContext context) {

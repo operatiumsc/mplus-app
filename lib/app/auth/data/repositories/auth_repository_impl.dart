@@ -26,8 +26,6 @@ class AuthRepositoryImpl implements AuthRepository {
     final userDTO =
         await _authDatasource.signIn(username: username, password: password);
 
-    await _localUserDataSource.cacheUser(user: userDTO);
-
     final user = userDTO.toEntity();
     return user;
   }
@@ -38,10 +36,13 @@ class AuthRepositoryImpl implements AuthRepository {
     // TODO: implement signUpEmployee
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<User> refreshAuth({required String refreshToken}) {
-    // TODO: implement refreshAuth
-    throw UnimplementedError();
+  Future<User> refreshAuth({required String refreshToken}) async {
+    final userDTO =
+        await _authDatasource.refreshAuth(refreshToken: refreshToken);
+
+    final user = userDTO.toEntity();
+    return user;
   }
 }

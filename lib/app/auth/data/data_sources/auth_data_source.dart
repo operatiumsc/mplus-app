@@ -3,22 +3,28 @@ import 'package:mplus_app/utils/helpers/exception.dart';
 import 'package:mplus_app/utils/services/rest.dart';
 
 abstract class AuthDataSource {
-  Future<UserModel> signIn(
-      {required String username, required String password});
+  Future<UserModel> signIn({
+    required String username,
+    required String password,
+  });
   Future<bool> signOut();
   Future<bool> signUpEmployee({
     required String employeeId,
     required String email,
     required String password,
   });
+
+  Future<UserModel> refreshAuth({required String refreshToken});
 }
 
 class AuthDataSourceImpl implements AuthDataSource {
-  final _dio = Rest.client;
+  final _dio = Rest().client;
 
   @override
-  Future<UserModel> signIn(
-      {required String username, required String password}) async {
+  Future<UserModel> signIn({
+    required String username,
+    required String password,
+  }) async {
     final response = await _dio.post(
       '/auth/signin',
       data: {
@@ -58,6 +64,18 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<bool> signOut() {
     // TODO: implement signOut
-    throw UnimplementedError();
+    throw UnimplementedError('AuthDataSource/signOut');
+  }
+
+  @override
+  Future<UserModel> refreshAuth({required String refreshToken}) async {
+    final client = Rest().clientWithRefreshAuth;
+    final response = await client.post('/auth/refresh');
+
+    if (response.statusCode == 401) {
+      throw UnauthorizedException(message: response.data);
+    }
+
+    return UserModel.fromJson(response.data);
   }
 }
