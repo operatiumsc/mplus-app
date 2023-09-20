@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mplus_app/app/auth/domain/usecases/sign_out_usecase.dart';
-import 'package:mplus_app/app/home/domain/entities/app_module.dart';
-import 'package:mplus_app/app/home/presentation/pages/sales_module.dart';
 
-class HomePageChangeNotifier extends ChangeNotifier {
+import '../../../auth/domain/usecases/sign_out_usecase.dart';
+import '../../domain/entities/app_module.dart';
+import '../pages/sales_module.dart';
+
+class HomeChangeNotifier extends ChangeNotifier {
   final SignOutUseCase _signOutUseCase;
 
-  HomePageChangeNotifier({required SignOutUseCase signOutUseCase})
+  HomeChangeNotifier({required SignOutUseCase signOutUseCase})
       : _signOutUseCase = signOutUseCase;
 
   final List<AppModule> appModules = [

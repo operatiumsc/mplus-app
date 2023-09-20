@@ -11,7 +11,7 @@ import 'app/auth/presentation/login/pages/signin_page.dart';
 import 'app/auth/presentation/login/providers/signin_page_change_notifier.dart';
 import 'app/auth/presentation/splash/splash_screen.dart';
 import 'app/home/presentation/pages/home_page.dart';
-import 'app/home/presentation/providers/home_page_change_notifier.dart';
+import 'app/home/presentation/providers/home_change_notifier.dart';
 import 'app/user/domain/repositories/user_repository.dart';
 import 'injection.dart';
 import 'utils/constants/colors.dart';
@@ -39,7 +39,7 @@ Future<void> main() async {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => HomePageChangeNotifier(
+          create: (_) => HomeChangeNotifier(
             signOutUseCase: SignOutUseCase(
               authRepository: service.get<AuthRepository>(),
             ),

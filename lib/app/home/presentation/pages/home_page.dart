@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/home_page_change_notifier.dart';
+import '../providers/home_change_notifier.dart';
 import 'sales_module.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomePageChangeNotifier>(
+    return Consumer<HomeChangeNotifier>(
       builder: (_, notifier, __) {
         if (notifier.currentModule.name == 'Sales') {
           return const SalesModule();

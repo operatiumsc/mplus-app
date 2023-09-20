@@ -21,7 +21,7 @@ import '../../../shipments/domain/repositories/shipments_repository.dart';
 import '../../../shipments/domain/usecases/get_shipments_usecase.dart';
 import '../../../shipments/presentation/change_notifers/shipments_change_notifier.dart';
 import '../../../shipments/presentation/pages/shipments_page.dart';
-import '../providers/Home_page_change_notifier.dart';
+import '../providers/home_change_notifier.dart';
 import '../widgets/all_menus_button.dart';
 import '../widgets/user_avatar_button.dart';
 
@@ -82,8 +82,7 @@ class _SalesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PageController pageController = PageController(
-        initialPage:
-            context.watch<HomePageChangeNotifier>().currentSubModuleIndex);
+        initialPage: context.watch<HomeChangeNotifier>().currentSubModuleIndex);
 
     return Scaffold(
       appBar: AppBar(
@@ -93,7 +92,7 @@ class _SalesView extends StatelessWidget {
         leading: Row(
           children: [
             const AllModulesButton(),
-            Consumer<HomePageChangeNotifier>(
+            Consumer<HomeChangeNotifier>(
               builder: (_, notifier, __) => Text(
                 notifier.currentModule.name,
                 style: const TextStyle(
@@ -108,7 +107,7 @@ class _SalesView extends StatelessWidget {
             Row(
               children: List.generate(
                 context
-                    .read<HomePageChangeNotifier>()
+                    .read<HomeChangeNotifier>()
                     .currentModule
                     .subModules
                     .length,
@@ -116,7 +115,7 @@ class _SalesView extends StatelessWidget {
                   data: Theme.of(context).copyWith(
                     canvasColor: Colors.transparent,
                   ),
-                  child: Consumer<HomePageChangeNotifier>(
+                  child: Consumer<HomeChangeNotifier>(
                     builder: (_, notifier, __) => ChoiceChip(
                       selected: notifier.currentSubModuleIndex == index,
                       onSelected: (_) {
@@ -160,7 +159,7 @@ class _SalesView extends StatelessWidget {
         controller: pageController,
         onPageChanged: (index) {
           context
-              .read<HomePageChangeNotifier>()
+              .read<HomeChangeNotifier>()
               .selectedSubModule(pageController: pageController, index: index);
           pageController.jumpToPage(index);
         },

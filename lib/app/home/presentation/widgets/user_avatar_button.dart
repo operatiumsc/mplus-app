@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mplus_app/app/auth/presentation/login/pages/signin_page.dart';
-import 'package:mplus_app/app/home/presentation/providers/home_page_change_notifier.dart';
+import 'package:mplus_app/app/home/presentation/providers/home_change_notifier.dart';
 import 'package:provider/provider.dart';
 
 class UserAvatarButton extends StatelessWidget {
@@ -21,7 +21,7 @@ class UserAvatarButton extends StatelessWidget {
         PopupMenuItem(
           child: TextButton.icon(
             onPressed: () {
-              context.read<HomePageChangeNotifier>().performSignOut();
+              context.read<HomeChangeNotifier>().performSignOut();
 
               Navigator.of(context).pushAndRemoveUntil(
                   CupertinoPageRoute(builder: (context) => const LoginPage()),
