@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mplus_app/app/auth/domain/repositories/auth_repository.dart';
-import 'package:mplus_app/app/auth/domain/usecases/refresh_auth_usecase.dart';
-import 'package:mplus_app/app/auth/domain/usecases/sign_in_usecase.dart';
-import 'package:mplus_app/app/auth/domain/usecases/sign_out_usecase.dart';
-import 'package:mplus_app/app/auth/presentation/splash/splash_screen.dart';
-import 'package:mplus_app/app/user/domain/repositories/user_repository.dart';
-import 'package:mplus_app/injection.dart';
-import 'package:mplus_app/app/home/presentation/providers/home_page_change_notifier.dart';
-import 'package:mplus_app/app/home/presentation/pages/home_page.dart';
-import 'package:mplus_app/app/auth/presentation/login/pages/signin_page.dart';
-import 'package:mplus_app/app/auth/presentation/login/providers/signin_page_change_notifier.dart';
-import 'package:mplus_app/utils/constants/colors.dart';
-import 'package:mplus_app/utils/services/persistent_storage.dart';
 import 'package:provider/provider.dart';
+
+import 'app/auth/domain/repositories/auth_repository.dart';
+import 'app/auth/domain/usecases/refresh_auth_usecase.dart';
+import 'app/auth/domain/usecases/sign_in_usecase.dart';
+import 'app/auth/domain/usecases/sign_out_usecase.dart';
+import 'app/auth/presentation/login/pages/signin_page.dart';
+import 'app/auth/presentation/login/providers/signin_page_change_notifier.dart';
+import 'app/auth/presentation/splash/splash_screen.dart';
+import 'app/home/presentation/pages/home_page.dart';
+import 'app/home/presentation/providers/home_page_change_notifier.dart';
+import 'app/user/domain/repositories/user_repository.dart';
+import 'injection.dart';
+import 'utils/constants/colors.dart';
+import 'utils/services/persistent_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,7 @@ class App extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SignInPageChangeNotifier>().init();
     });
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
