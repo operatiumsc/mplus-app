@@ -7,7 +7,7 @@ class GetShipmentsUseCase {
 
   final ShipmentsRepository _shipmentsRepository;
 
-  Future<List<Shipment>> call({int? page}) {
+  Future<List<Shipment>> call({int? page = 0}) {
     return _shipmentsRepository.getShipments(page: page);
   }
 }
