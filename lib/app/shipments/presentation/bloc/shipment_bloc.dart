@@ -1,10 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:mplus_app/app/invoices/presentation/config.dart';
-import 'package:mplus_app/app/shipments/domain/usecases/get_shipments_usecase.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../utils/helpers/event_transformer.dart';
+import '../../../invoices/presentation/config.dart';
 import '../../domain/entities/shipment.dart';
+import '../../domain/usecases/get_shipments_usecase.dart';
 
 part 'shipment_event.dart';
 part 'shipment_state.dart';
@@ -13,7 +14,10 @@ class ShipmentBloc extends Bloc<ShipmentEvent, ShipmentState> {
   ShipmentBloc({required GetShipmentsUseCase getShipmentsUseCase})
       : _getShipmentsUseCase = getShipmentsUseCase,
         super(const ShipmentState()) {
-    on<GetShipmentsEvent>(_onGetShipments);
+    on<GetShipmentsEvent>(
+      _onGetShipments,
+      transformer: throttle(const Duration(milliseconds: 100)),
+    );
   }
 
   final GetShipmentsUseCase _getShipmentsUseCase;
@@ -22,36 +26,34 @@ class ShipmentBloc extends Bloc<ShipmentEvent, ShipmentState> {
       GetShipmentsEvent event, Emitter<ShipmentState> emit) async {
     if (state.hasReachedMax) return;
 
-    emit(state.copyWith(status: ShipmentStatus.loading));
-
     try {
       if (state.status.isInitial) {
         final shipments = await _getShipmentsUseCase.call();
-
-        return emit(state.copyWith(
-          status: ShipmentStatus.success,
-          shipments: shipments,
-          hasReachedMax: false,
-        ));
+        return emit(
+          state.copyWith(
+            status: ShipmentStatus.success,
+            shipments: shipments,
+            hasReachedMax: false,
+          ),
+        );
       }
 
-      final pageIndex = state.shipments.length % PageConfig.pageSize;
+      if (!state.status.isSuccess) return;
 
+      final pageIndex = (state.shipments.length / PageConfig.pageSize).ceil();
       final shipments = await _getShipmentsUseCase.call(page: pageIndex);
 
-      if (shipments.isEmpty) {
-        return emit(state.copyWith(
-          status: ShipmentStatus.success,
-          shipments: shipments,
-          hasReachedMax: true,
-        ));
-      } else {
-        return emit(state.copyWith(
-          status: ShipmentStatus.success,
-          shipments: shipments..addAll(shipments),
-          hasReachedMax: false,
-        ));
-      }
+      shipments.isEmpty
+          ? emit(state.copyWith(hasReachedMax: true))
+          : emit(
+              state.copyWith(
+                status: ShipmentStatus.success,
+                shipments: List.of(shipments)..addAll(shipments),
+                hasReachedMax: false,
+              ),
+            );
+
+      debugPrint('Shipments have already reached max.');
     } catch (error, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
 

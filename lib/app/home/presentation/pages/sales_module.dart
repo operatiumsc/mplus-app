@@ -17,9 +17,7 @@ import '../../../quotes/domain/repositories/quotes_repository.dart';
 import '../../../quotes/domain/usecases/get_quotes_usecase.dart';
 import '../../../quotes/presentation/change_notifiers/quotes_change_notifier.dart';
 import '../../../quotes/presentation/pages/quotes_page.dart';
-import '../../../shipments/domain/repositories/shipments_repository.dart';
-import '../../../shipments/domain/usecases/get_shipments_usecase.dart';
-import '../../../shipments/presentation/change_notifers/shipments_change_notifier.dart';
+
 import '../../../shipments/presentation/pages/shipments_page.dart';
 import '../providers/home_change_notifier.dart';
 import '../widgets/all_menus_button.dart';
@@ -56,20 +54,14 @@ class SalesModule extends StatelessWidget {
             ),
           ),
         ),
-        ChangeNotifierProvider(
-          create: (_) => ShipmentsChangeNotifier(
-            getShipmentsUseCase: GetShipmentsUseCase(
-              shipmentsRepository: service.get<ShipmentsRepository>(),
-            ),
-          ),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ShipmentsChangeNotifier(
-            getShipmentsUseCase: GetShipmentsUseCase(
-              shipmentsRepository: service.get<ShipmentsRepository>(),
-            ),
-          ),
-        )
+
+        // ChangeNotifierProvider(
+        //   create: (_) => ShipmentsChangeNotifier(
+        //     getShipmentsUseCase: GetShipmentsUseCase(
+        //       shipmentsRepository: service.get<ShipmentsRepository>(),
+        //     ),
+        //   ),
+        // )
       ],
       builder: (_, __) => const _SalesView(),
     );
@@ -167,7 +159,7 @@ class _SalesView extends StatelessWidget {
           QuotesView(),
           PurchaseOrdersView(),
           InvoiceView(),
-          ShipmentsView(),
+          ShipmentsPage(),
         ],
       ),
     );
