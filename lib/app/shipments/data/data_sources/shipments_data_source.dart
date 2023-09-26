@@ -1,4 +1,4 @@
-import 'package:mplus_app/app/invoices/presentation/config.dart';
+import 'package:mplus_app/utils/constants/page_config.dart';
 import 'package:mplus_app/app/shipments/data/dto/shipment_dto.dart';
 import 'package:mplus_app/utils/services/rest.dart';
 
@@ -13,7 +13,7 @@ class ShipmentsDataSourceImpl implements ShipmentsDataSource {
   Future<List<ShipmentDTO>> getShipments({int? page}) async {
     final response = await _client.get('/shipments', queryParameters: {
       'page': page,
-      'perPage': PageConfig.pageSize,
+      'perPage': PageConfig.defaultPageSize,
     });
 
     List json = response.data;

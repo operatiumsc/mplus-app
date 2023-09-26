@@ -1,4 +1,4 @@
-import 'package:mplus_app/app/invoices/presentation/config.dart';
+import 'package:mplus_app/utils/constants/page_config.dart';
 
 import '../../../../utils/services/rest.dart';
 import '../dto/quote_dto.dart';
@@ -14,7 +14,7 @@ class QuotesDataSourceImpl implements QuotesDataSource {
   Future<List<QuoteDTO>> getQuotes({int? page}) async {
     final response = await _client.get('/quotations', queryParameters: {
       'page': page,
-      'perPage': PageConfig.pageSize,
+      'perPage': PageConfig.defaultPageSize,
     });
 
     List json = response.data;

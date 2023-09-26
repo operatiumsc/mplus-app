@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mplus_app/app/invoices/presentation/config.dart';
+import 'package:mplus_app/utils/constants/page_config.dart';
 import 'package:mplus_app/app/quotes/domain/entities/quote.dart';
 import 'package:mplus_app/app/quotes/domain/usecases/get_quotes_usecase.dart';
 
@@ -50,7 +50,7 @@ class QuotesChangeNotifier extends ChangeNotifier {
       listViewStatus == QuotesListViewStatus.loading;
       notifyListeners();
 
-      if (quotes.length < PageConfig.pageSize) {
+      if (quotes.length < PageConfig.defaultPageSize) {
         //No Need to fetch more items
         listViewStatus == QuotesListViewStatus.max;
       } else {

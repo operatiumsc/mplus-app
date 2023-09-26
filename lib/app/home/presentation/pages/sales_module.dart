@@ -4,10 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../injection.dart';
 import '../../../../utils/constants/colors.dart';
-import '../../../invoices/domain/repositories/invoice_repository.dart';
-import '../../../invoices/domain/usecases/get_invoices_usecase.dart';
 import '../../../invoices/presentation/pages/invoice_page.dart';
-import '../../../invoices/presentation/providers/invoice_page_change_notifier.dart';
 import '../../../orders/domain/repositories/purchase_orders_repository.dart';
 import '../../../orders/domain/usecases/get_purchase_order_lines_usecase.dart';
 import '../../../orders/domain/usecases/get_purchase_orders_usecase.dart';
@@ -17,7 +14,6 @@ import '../../../quotes/domain/repositories/quotes_repository.dart';
 import '../../../quotes/domain/usecases/get_quotes_usecase.dart';
 import '../../../quotes/presentation/change_notifiers/quotes_change_notifier.dart';
 import '../../../quotes/presentation/pages/quotes_page.dart';
-
 import '../../../shipments/presentation/pages/shipments_page.dart';
 import '../providers/home_change_notifier.dart';
 import '../widgets/all_menus_button.dart';
@@ -47,13 +43,13 @@ class SalesModule extends StatelessWidget {
             ),
           ),
         ),
-        ChangeNotifierProvider<InvoiceChangeNotifier>(
-          create: (_) => InvoiceChangeNotifier(
-            getInvoicesUseCase: GetInvoicesUseCase(
-              invoiceRepository: service.get<InvoiceRepository>(),
-            ),
-          ),
-        ),
+        // ChangeNotifierProvider<InvoiceChangeNotifier>(
+        //   create: (_) => InvoiceChangeNotifier(
+        //     getInvoicesUseCase: GetInvoicesUseCase(
+        //       invoiceRepository: service.get<InvoiceRepository>(),
+        //     ),
+        //   ),
+        // ),
 
         // ChangeNotifierProvider(
         //   create: (_) => ShipmentsChangeNotifier(
@@ -158,7 +154,7 @@ class _SalesView extends StatelessWidget {
         children: const [
           QuotesView(),
           PurchaseOrdersView(),
-          InvoiceView(),
+          InvoicePage(),
           ShipmentsPage(),
         ],
       ),

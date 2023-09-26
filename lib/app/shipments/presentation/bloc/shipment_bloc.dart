@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../utils/helpers/event_transformer.dart';
-import '../../../invoices/presentation/config.dart';
+import '../../../../utils/constants/page_config.dart';
 import '../../domain/entities/shipment.dart';
 import '../../domain/usecases/get_shipments_usecase.dart';
 
@@ -40,7 +40,8 @@ class ShipmentBloc extends Bloc<ShipmentEvent, ShipmentState> {
 
       if (!state.status.isSuccess) return;
 
-      final pageIndex = (state.shipments.length / PageConfig.pageSize).ceil();
+      final pageIndex =
+          (state.shipments.length / PageConfig.defaultPageSize).ceil();
       final shipments = await _getShipmentsUseCase.call(page: pageIndex);
 
       shipments.isEmpty
