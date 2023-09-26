@@ -27,7 +27,7 @@ class _InvoiceViewState extends State<InvoiceView> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [
             AppColors.navyBlue,
             AppColors.royalBlue,

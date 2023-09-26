@@ -57,20 +57,26 @@ class _ShipmentsViewState extends State<ShipmentsView> {
                 children: [
                   const ShipmentMenu(),
                   Expanded(
-                    child: Scrollbar(
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        itemBuilder: (context, index) {
-                          return index >= state.shipments.length
-                              ? const Text('Loading...')
-                              : ShipmentItem(shipment: state.shipments[index]);
-                        },
-                        itemCount: state.hasReachedMax
-                            ? state.shipments.length
-                            : state.shipments.length + 1,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 8),
-                        padding: const EdgeInsets.all(16.0),
+                    child: RefreshIndicator(
+                      onRefresh: () async => context
+                          .read<ShipmentBloc>()
+                          .add(RefreshShipmentEvent()),
+                      child: Scrollbar(
+                        child: ListView.separated(
+                          controller: _scrollController,
+                          itemBuilder: (context, index) {
+                            return index >= state.shipments.length
+                                ? const Text('Loading...')
+                                : ShipmentItem(
+                                    shipment: state.shipments[index]);
+                          },
+                          itemCount: state.hasReachedMax
+                              ? state.shipments.length
+                              : state.shipments.length + 1,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 8),
+                          padding: const EdgeInsets.all(16.0),
+                        ),
                       ),
                     ),
                   ),

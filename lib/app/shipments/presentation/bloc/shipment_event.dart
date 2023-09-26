@@ -9,6 +9,8 @@ sealed class ShipmentEvent extends Equatable {
 
 final class GetShipmentsEvent extends ShipmentEvent {}
 
+final class RefreshShipmentEvent extends ShipmentEvent {}
+
 final class SelectedShipment extends ShipmentEvent {
   const SelectedShipment({required this.selectedId});
 

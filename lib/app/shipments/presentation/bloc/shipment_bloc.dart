@@ -18,12 +18,13 @@ class ShipmentBloc extends Bloc<ShipmentEvent, ShipmentState> {
       _onGetShipments,
       transformer: throttle(const Duration(milliseconds: 100)),
     );
+    on<RefreshShipmentEvent>(_onRefreshShipments);
   }
 
   final GetShipmentsUseCase _getShipmentsUseCase;
 
   Future<void> _onGetShipments(
-      GetShipmentsEvent event, Emitter<ShipmentState> emit) async {
+      ShipmentEvent event, Emitter<ShipmentState> emit) async {
     if (state.hasReachedMax) return;
 
     try {
@@ -58,6 +59,25 @@ class ShipmentBloc extends Bloc<ShipmentEvent, ShipmentState> {
     } catch (error, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
 
+      emit(state.copyWith(status: ShipmentStatus.error));
+    }
+  }
+
+  Future<void> _onRefreshShipments(
+      ShipmentEvent event, Emitter<ShipmentState> emit) async {
+    debugPrint('Perform refresh indicator');
+    try {
+      final shipments = await _getShipmentsUseCase.call();
+
+      emit(
+        state.copyWith(
+          status: ShipmentStatus.success,
+          shipments: shipments,
+          hasReachedMax: false,
+        ),
+      );
+    } catch (err, stackTrace) {
+      debugPrintStack(stackTrace: stackTrace);
       emit(state.copyWith(status: ShipmentStatus.error));
     }
   }
